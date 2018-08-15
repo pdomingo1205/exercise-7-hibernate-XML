@@ -1,0 +1,35 @@
+<!DOCTYPE hibernate-mapping
+PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exer7.hibernate">
+
+	<class name="com.model.person.Address" table="address">
+		<id name="addressId" type="java.lang.Long">
+			<column name="ADDRESS_ID" />
+			<generator class="foreign">
+				<param name="property">person</param>
+			</generator>
+		</id>
+
+		<one-to-one name="person" class="com.model.person.Person"
+			constrained="true"></one-to-one>
+		</one-to-one>
+
+		<property name="streetNo" type="java.lang.Integer">
+			<column name="STREET_NO"/>
+		</property>
+
+		<property name="barangay" type="string">
+			<column name="BARANGAY"/>
+		</property>
+
+		<property name="municipality" type="string">
+			<column name="MUNICIPALITY"/>
+		</property>
+
+		<property name="zipCode" type="string">
+			<column name="ZIP_CODE"/>
+		</property>
+
+	</class>
+</hibernate-mapping>
