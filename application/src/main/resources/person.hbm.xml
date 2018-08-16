@@ -1,27 +1,58 @@
-<!DOCTYPE hibernate-mapping
-PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
 <hibernate-mapping package="com.exer7.hibernate">
 
-	<class name="com.model.person.Person" table="PERSON">
+	<class name="com.pdomingo.model.person.Person" table="PERSON">
 
-		<id name="id" type="java.lang.Long" column="ID">
+		<id name="personId" type="java.lang.Long" column="PERSON_ID">
 			<generator class="sequence"/>
 		</id>
 
-		<one-to-one name="name" class="com.model.Name"
-			cascade="save-update">
-		</one-to-one>
+		<component name="name" class="com.pdomingo.model.person.Name">
+			<property name="firstName" type="string">
+				<column name="FIRST_NAME"/>
+			</property>
 
-		<one-to-one name="address" class="com.model.Address"
-			cascade="save-update">
-		</one-to-one>
+			<property name="lastName" type="string">
+				<column name="LAST_NAME"/>
+			</property>
+
+			<property name="middleName" type="string">
+				<column name="MIDDLE_NAME"/>
+			</property>
+
+			<property name="suffix" type="string">
+				<column name="SUFFIX"/>
+			</property>
+
+			<property name="title" type="string">
+				<column name="TITLE"/>
+			</property>
+		</component>
+
+
+		<component name="address" class="com.pdomingo.model.person.Address">
+			<property name="streetNo" type="java.lang.Integer">
+				<column name="STREET_NO"/>
+			</property>
+			<property name="barangay" type="string">
+				<column name="BARANGAY"/>
+			</property>
+			<property name="municipality" type="string">
+				<column name="MUNICIPALITY"/>
+			</property>
+			<property name="zipCode" type="string">
+				<column name="ZIP_CODE"/>
+			</property>
+		</component>
 
 		<property name="bDay" type="date">
 			<column name="BIRTH_DAY"/>
 		</property>
 
-		<property name="gwa" type="double">
+		<property name="GWA" type="double">
 			<column name="GWA" length="3" />
 		</property>
 
@@ -33,32 +64,20 @@ PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 			<column name="CURR_EMPLOYED"/>
 		</property>
 
-		<property name="contactInfo" type="date">
-			<column name="BDAY"/>
-		</property>
-
 		<set name="contactInfo" table="contact_info"
 		inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="PERSON_ID" not-null="true" />
 			</key>
-			<one-to-many class="com.model.person.ContactInfo" />
+			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
-		<set name="contactInfo" table="contact_info"
+		<set name="roles" table="role"
 		inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="PERSON_ID" not-null="true" />
 			</key>
-			<one-to-many class="com.model.person.ContactInfo" />
-		</set>
-
-		<set name="roles" table="roles"
-		inverse="true" lazy="true" fetch="select">
-			<key>
-				<column name="PERSON_ID" not-null="true" />
-			</key>
-			<one-to-many class="com.model.person.PersonRole" />
+			<one-to-many class="com.pdomingo.model.person.PersonRole" />
 		</set>
 
 	</class>

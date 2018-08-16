@@ -7,9 +7,9 @@
   <url>http://maven.apache.org</url>
 
   <parent>
-      <groupId>com.multi-mod</groupId>
-      <artifactId>multi-module-parent</artifactId>
+      <groupId>com.pdomingo</groupId>
+      <artifactId>core</artifactId>
       <version>1.0</version>
   </parent>
-  
+
 </project>

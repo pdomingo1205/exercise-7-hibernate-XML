@@ -1,9 +1,10 @@
-<!DOCTYPE hibernate-mapping
-PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="com.exer7.hibernate">
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-	<class name="com.model.person.ContactInfo" table="contact_info">
+<hibernate-mapping package="com.exer7.hibernate">
+	<class name="com.pdomingo.model.person.ContactInfo" table="contact_info">
+
 		<id name="contactInfoId" type="java.lang.Long">
 			<column name="CONTACT_INFO_ID" />
 			<generator class="foreign">
@@ -11,8 +12,8 @@ PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 			</generator>
 		</id>
 
-		<one-to-one name="person" class="com.model.person.Person"
-			constrained="true"></one-to-one>
+		<one-to-one name="person" class="com.pdomingo.model.person.Person"
+			constrained="true">
 		</one-to-one>
 
 		<property name="contactInfo" type="string">
