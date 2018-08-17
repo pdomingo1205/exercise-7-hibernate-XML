@@ -7,7 +7,7 @@
 	<class name="com.pdomingo.model.person.Person" table="PERSON">
 
 		<id name="personId" type="java.lang.Long" column="PERSON_ID">
-			<generator class="sequence"/>
+			<generator class="native"/>
 		</id>
 
 		<component name="name" class="com.pdomingo.model.person.Name">
@@ -64,21 +64,14 @@
 			<column name="CURR_EMPLOYED"/>
 		</property>
 
-		<set name="contactInfo" table="contact_info"
-		inverse="true" lazy="true" fetch="select">
+		<set name="contactInfo" table="contact_info"  inverse="true" lazy="true" fetch="select" cascade="all">
 			<key>
 				<column name="PERSON_ID" not-null="true" />
 			</key>
 			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
-		<set name="roles" table="role"
-		inverse="true" lazy="true" fetch="select">
-			<key>
-				<column name="PERSON_ID" not-null="true" />
-			</key>
-			<one-to-many class="com.pdomingo.model.person.PersonRole" />
-		</set>
+
 
 	</class>
 </hibernate-mapping>

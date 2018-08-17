@@ -7,14 +7,12 @@
 
 		<id name="contactInfoId" type="java.lang.Long">
 			<column name="CONTACT_INFO_ID" />
-			<generator class="foreign">
-				<param name="property">person</param>
-			</generator>
+			<generator class="native"/>
 		</id>
 
-		<one-to-one name="person" class="com.pdomingo.model.person.Person"
-			constrained="true">
-		</one-to-one>
+		<many-to-one name="person" class="com.pdomingo.model.person.Person">
+			<column name="PERSON_ID" not-null="true" />
+		</many-to-one>
 
 		<property name="contactInfo" type="string">
 			<column name="CONTACT_INFO"/>

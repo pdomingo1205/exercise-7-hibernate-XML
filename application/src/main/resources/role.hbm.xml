@@ -13,5 +13,7 @@
 			<column name="ROLE"/>
 		</property>
 
+
+
 	</class>
 </hibernate-mapping>
