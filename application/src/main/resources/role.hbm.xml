@@ -6,14 +6,12 @@
 
 	<class name="com.pdomingo.model.role.Role" table="role">
 		<id name="roleId" type="java.lang.Long" column="ROLE_ID">
-			<generator class="sequence"/>
+			<generator class="native"/>
 		</id>
 
 		<property name="role" type="string">
 			<column name="ROLE"/>
 		</property>
-
-
 
 	</class>
 </hibernate-mapping>

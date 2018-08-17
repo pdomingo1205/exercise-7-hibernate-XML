@@ -71,6 +71,10 @@
 			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
+		<set name="roles" table="PERSON_ROLES" cascade="all">
+            <key column="PERSON_ID" />
+            <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role" />
+        </set>
 
 
 	</class>
