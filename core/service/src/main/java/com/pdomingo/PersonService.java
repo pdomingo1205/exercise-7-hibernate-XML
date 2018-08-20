@@ -14,6 +14,7 @@ public class PersonService {
 	}
 
 	public void persist(Person entity) {
+		System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
 		personDao.openCurrentSessionwithTransaction();
 		personDao.persist(entity);
 		personDao.closeCurrentSessionwithTransaction();
@@ -28,7 +29,8 @@ public class PersonService {
 	public Person findById(Long id) {
 		personDao.openCurrentSession();
 		Person person = personDao.findById(id);
-		personDao.closeCurrentSession();
+		System.out.println("pservice findbyid\n\n\n" + person.getName() + "\n\n\n");
+		//personDao.closeCurrentSession();
 		return person;
 	}
 

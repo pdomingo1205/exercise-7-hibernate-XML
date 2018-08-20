@@ -73,6 +73,12 @@
 
     <dependency>
         <groupId>com.pdomingo</groupId>
+        <artifactId>infra</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.pdomingo</groupId>
         <artifactId>model</artifactId>
         <version>${project.version}</version>
     </dependency>
