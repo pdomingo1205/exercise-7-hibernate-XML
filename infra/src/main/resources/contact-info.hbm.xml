@@ -7,7 +7,7 @@
 
 		<id name="contactInfoId" type="java.lang.Long">
 			<column name="CONTACT_INFO_ID" />
-			<generator class="native"/>
+			<generator class="identity"/>
 		</id>
 
 		<many-to-one name="person" class="com.pdomingo.model.person.Person">
@@ -16,6 +16,10 @@
 
 		<property name="contactInfo" type="string">
 			<column name="CONTACT_INFO"/>
+		</property>
+
+		<property name="contactType" type="string">
+			<column name="CONTACT_TYPE"/>
 		</property>
 
 	</class>

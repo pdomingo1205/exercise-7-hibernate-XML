@@ -45,10 +45,12 @@ public class PersonDao implements DaoInterface<Person, Long> {
 
 	private static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure();
-		//Configuration configuration = new Configuration().configure();
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
+		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+		.applySettings(configuration.getProperties());
+		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
 
-		//SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+		//Configuration configuration = new Configuration().configure();
+        //SessionFactory sessionFactory = configuration.buildSessionFactory();
 		return sessionFactory;
 	}
 
@@ -69,7 +71,8 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	public void persist(Person entity) {
-		getCurrentSession().save(entity);
+		System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
+		getCurrentSession().saveOrUpdate(entity);
 	}
 
 	public void update(Person entity) {
@@ -78,6 +81,8 @@ public class PersonDao implements DaoInterface<Person, Long> {
 
 	public Person findById(Long id) {
 		Person person = (Person) getCurrentSession().get(Person.class, id);
+
+		System.out.println("\n\n\n pdao findid" + person.getName() + "\n\n\n");
 		return person;
 	}
 

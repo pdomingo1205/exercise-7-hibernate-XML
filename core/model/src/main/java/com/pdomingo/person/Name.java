@@ -25,6 +25,10 @@ public class Name{
 		this.title = newTitle;
 	}
 
+	public String getTitle(){
+		return title;
+	}
+	
 	public String getFirstName(){
 		return firstName;
 	}
@@ -41,9 +45,6 @@ public class Name{
 		return suffix;
 	}
 
-	public String getTitle(){
-		return title;
-	}
 
 	public void setFirstName(String newFirstName){
 		this.firstName = newFirstName;
@@ -62,12 +63,12 @@ public class Name{
 	}
 
 	public void setTitle(String newTitle){
-		this.lastName = newTitle;
+		this.title = newTitle;
 	}
 
+	@Override
 	public String toString(){
-		return title + firstName + middleName
-			+ lastName + suffix;
+		return String.format("%s %s %s %s %s", this.title, this.firstName, this.middleName, this.lastName, this.suffix);
 	}
 
 

@@ -7,10 +7,14 @@
 	<class name="com.pdomingo.model.person.Person" table="PERSON">
 
 		<id name="personId" type="java.lang.Long" column="PERSON_ID">
-			<generator class="native"/>
+			<generator class="identity"/>
 		</id>
 
 		<component name="name" class="com.pdomingo.model.person.Name">
+			<property name="title" type="string">
+				<column name="TITLE"/>
+			</property>
+
 			<property name="firstName" type="string">
 				<column name="FIRST_NAME"/>
 			</property>
@@ -27,9 +31,6 @@
 				<column name="SUFFIX"/>
 			</property>
 
-			<property name="title" type="string">
-				<column name="TITLE"/>
-			</property>
 		</component>
 
 
@@ -62,6 +63,7 @@
 
 		<property name="currEmployed" type="boolean">
 			<column name="CURR_EMPLOYED"/>
+
 		</property>
 
 		<set name="contactInfo" table="contact_info"  inverse="true" lazy="true" fetch="select" cascade="all">
@@ -71,9 +73,9 @@
 			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
-		<set name="roles" table="PERSON_ROLES" cascade="all">
+		<set name="roles" table="PERSON_ROLES" cascade="save-update">
             <key column="PERSON_ID" />
-            <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role" />
+            <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role"/>
         </set>
 
 

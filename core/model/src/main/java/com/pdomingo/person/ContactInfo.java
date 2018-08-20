@@ -6,6 +6,7 @@ public class ContactInfo implements java.io.Serializable{
 
 	private Long contactInfoId;
 	private String contactInfo;
+	private String contactType;
 	private Person person;
 
 
@@ -26,6 +27,10 @@ public class ContactInfo implements java.io.Serializable{
 		return contactInfo;
 	}
 
+	public String getContactType(){
+		return contactType;
+	}
+
 	public Person getPerson(){
 		return person;
 	}
@@ -38,9 +43,17 @@ public class ContactInfo implements java.io.Serializable{
 		this.contactInfo = newContactInfo;
 	}
 
+	public void setContactType(String newContactType){
+		this.contactType = newContactType;
+	}
+
 	public void setPerson(Person newPerson){
 		this.person = newPerson;
 	}
 
+	@Override
+	public String toString(){
+		return String.format("%s %s: %s", person.getName(), contactType, contactInfo);
+	}
 
 }

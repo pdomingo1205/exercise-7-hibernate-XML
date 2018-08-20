@@ -8,7 +8,7 @@
 
   <parent>
       <groupId>com.pdomingo</groupId>
-      <artifactId>hibernate-parent</artifactId>
+      <artifactId>core</artifactId>
       <version>1.0</version>
   </parent>
 

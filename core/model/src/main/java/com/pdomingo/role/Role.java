@@ -7,8 +7,6 @@ public class Role{
 
 	private Long roleId;
 	private String role;
-	private Set<Person> assignedPersons = new HashSet<Person>(0);
-
 
 	public Role(){
 
@@ -26,10 +24,6 @@ public class Role{
 		return role;
 	}
 
-	public Set<Person> getAssignedPersons(){
-		return assignedPersons;
-	}
-
 	public void setroleId(Long newRoleId){
 		this.roleId = newRoleId;
 	}
@@ -38,9 +32,6 @@ public class Role{
 		this.role = newRole;
 	}
 
-	public void setAssignedPersons(Set<Person> newPersons){
-		this.assignedPersons = newPersons;
-	}
 
 
 }

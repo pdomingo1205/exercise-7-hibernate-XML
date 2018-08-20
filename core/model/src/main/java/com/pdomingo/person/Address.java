@@ -52,5 +52,9 @@ public class Address{
 		this.zipCode = newZipCode;
 	}
 
+	@Override
+	public String toString(){
+		return String.format("%s %s %s %s ", streetNo, barangay, municipality, zipCode);
+	}
 
 }
