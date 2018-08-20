@@ -8,18 +8,76 @@ import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
 
 public class Menu {
-	Scanner
+	Scanner scan = new Scanner(System.in);
 
 	public Menu(){
 
 	}
 
-	public Menu(Scanner scanner){
+	public Menu(Scanner newScanner){
+		scan = newScanner;
+	}
+
+	public String chooseOperation(){
+		String input;
+
+		System.out.println("\n \t--- Choose Operation --- \n");
+		System.out.println("\n \ta. Create Person");
+		System.out.println("\n \tb. Read Person");
+		System.out.println("\n \tc. Update Person");
+		System.out.println("\n \td. Delete Person");
+		System.out.println("\n \te. List Persons");
+		System.out.println("\n \tf. Manage Person (Role/Contact Info)");
+		System.out.println("\n \tg. Exit");
+
+
+		input = scan.nextLine();
+		return input;
+	}
+
+	public void createPerson(){
 
 	}
 
+	public void readPerson(){
 
+	}
 
+	public void updatePerson(){
+
+	}
+
+	public void deletePerson(){
+
+	}
+
+	public void listPersons(){
+
+	}
+
+	public void managePerson(){
+
+	}
+
+	public void start(){
+		String input;
+		input = chooseOperation();
+
+		switch(input.toUpperCase()) {
+			case "A":
+
+				break;
+
+			case "B":
+		}
+
+	}
+
+	public void newPerson(){
+		System.out.println("");
+	}
+
+	/*
 	public void start() {
 		// Name sample
 		Name name = new Name();
@@ -89,5 +147,5 @@ public class Menu {
 
 		 System.exit(0);
 	}
-
+*/
 }
