@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.exer7.hibernate">
+
+	<class name="com.pdomingo.model.person.Person" table="PERSON">
+
+		<id name="personId" type="java.lang.Long" column="PERSON_ID">
+			<generator class="native"/>
+		</id>
+
+		<component name="name" class="com.pdomingo.model.person.Name">
+			<property name="firstName" type="string">
+				<column name="FIRST_NAME"/>
+			</property>
+
+			<property name="lastName" type="string">
+				<column name="LAST_NAME"/>
+			</property>
+
+			<property name="middleName" type="string">
+				<column name="MIDDLE_NAME"/>
+			</property>
+
+			<property name="suffix" type="string">
+				<column name="SUFFIX"/>
+			</property>
+
+			<property name="title" type="string">
+				<column name="TITLE"/>
+			</property>
+		</component>
+
+
+		<component name="address" class="com.pdomingo.model.person.Address">
+			<property name="streetNo" type="java.lang.Integer">
+				<column name="STREET_NO"/>
+			</property>
+			<property name="barangay" type="string">
+				<column name="BARANGAY"/>
+			</property>
+			<property name="municipality" type="string">
+				<column name="MUNICIPALITY"/>
+			</property>
+			<property name="zipCode" type="string">
+				<column name="ZIP_CODE"/>
+			</property>
+		</component>
+
+		<property name="bDay" type="date">
+			<column name="BIRTH_DAY"/>
+		</property>
+
+		<property name="GWA" type="double">
+			<column name="GWA" length="3" />
+		</property>
+
+		<property name="dateHired" type="date">
+			<column name="DATE_HIRED"/>
+		</property>
+
+		<property name="currEmployed" type="boolean">
+			<column name="CURR_EMPLOYED"/>
+		</property>
+
+		<set name="contactInfo" table="contact_info"  inverse="true" lazy="true" fetch="select" cascade="all">
+			<key>
+				<column name="PERSON_ID" not-null="true" />
+			</key>
+			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
+		</set>
+
+		<set name="roles" table="PERSON_ROLES" cascade="all">
+            <key column="PERSON_ID" />
+            <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role" />
+        </set>
+
+
+	</class>
+</hibernate-mapping>
