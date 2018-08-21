@@ -2,59 +2,59 @@ package com.pdomingo.app;
 
 import java.io.IOException;
 import java.util.*;
+import java.text.*;
 
 import org.apache.commons.lang3.StringUtils;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
 
-public class Menu {
+import static com.pdomingo.service.InputValidation.Validate.*;
+
+
+
+public class PersonIO {
 	Scanner scan = new Scanner(System.in);
 
-	public Menu(){
+
+	public PersonIO(){
 
 	}
 
-	public Menu(Scanner newScanner){
+	public PersonIO(Scanner newScanner){
 		scan = newScanner;
 	}
 
-	public String chooseOperation(){
-		String input;
+	public void chooseOperation(){
 
 		System.out.println("\n \t--- Choose Operation --- \n");
-		System.out.println("\n \ta. Create Person");
-		System.out.println("\n \tb. Read Person");
-		System.out.println("\n \tc. Update Person");
-		System.out.println("\n \td. Delete Person");
-		System.out.println("\n \te. List Persons");
-		System.out.println("\n \tf. Manage Person (Role/Contact Info)");
-		System.out.println("\n \tg. Exit");
+		System.out.println("\n \t1. Create Person");
+		System.out.println("\n \t2. Read Person");
+		System.out.println("\n \t3. Update Person");
+		System.out.println("\n \t4. Delete Person");
+		System.out.println("\n \t5. List Persons");
+		System.out.println("\n \t6. Manage Person (Role/Contact Info)");
+		System.out.println("\n \t7. Exit");
 
-
-		input = scan.nextLine();
-		return input;
 	}
 
 	public Name askName(){
 		Name name = new Name();
 
-		System.out.println()
-
 		System.out.println("\n \t Input Title \n");
-		name.setTitle(scan.nextLine());
+		name.setTitle(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input First Name \n");
-		name.setFirstName(scan.nextLine());
+		name.setFirstName(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Middle Name \n");
-		name.setMiddleName(scan.nextLine());
+		name.setMiddleName(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Last Name \n");
-		name.setLastName(scan.nextLine());
+		name.setLastName(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Suffix \n");
-		name.setSuffix(scan.nextLine());
+		name.setSuffix(InputValidation.Validate.getInput());
 
 		return name;
 	}
@@ -63,28 +63,26 @@ public class Menu {
 		Address address = new Address();
 
 		System.out.println("\n \t Input Street # \n");
-		address.setStreetNo(scan.nextLine());
+		address.setStreetNo(InputValidation.Validate.getInteger());
 
 		System.out.println("\n \t Input Barangay \n");
-		address.setBarangay(scan.nextLine());
+		address.setBarangay(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Municipality \n");
-		address.setMunicipality(scan.nextLine());
+		address.setMunicipality(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Zip Code \n");
-		address.setZipCode(scan.nextLine());
+		address.setZipCode(InputValidation.Validate.getInput());
 
 		return address;
 	}
 
-	import java.util.Date;
 
 
 	public Date askBirthDay(){
-		String sDate1 = scan.nextLine();
-		Date date = new SimpleDateFormat("YYYY-MM-DD").parse(sDate1);
+		System.out.println("\n \t Input Birthday in (YYYY-MM-DD) \n");
 
-		return date;
+		return InputValidation.Validate.getDate();
 	}
 
 
@@ -116,8 +114,9 @@ public class Menu {
 	}
 
 	public void start(){
+/*
 		String input;
-		input = chooseOperation();
+		chooseOperation();
 
 		switch(input.toUpperCase()) {
 			case "A":
@@ -126,7 +125,7 @@ public class Menu {
 
 			case "B":
 		}
-
+*/
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.pdomingo.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.pdomingo.model.role.Role;
 import com.pdomingo.dao.RoleDao;
@@ -19,6 +20,12 @@ public class RoleService {
 		roleDao.closeCurrentSessionwithTransaction();
 	}
 
+	public void persistSet(Set<Role> entity) {
+		roleDao.openCurrentSessionwithTransaction();
+		roleDao.persist(entity);
+		roleDao.closeCurrentSessionwithTransaction();
+	}
+
 	public void update(Role entity) {
 		roleDao.openCurrentSessionwithTransaction();
 		roleDao.update(entity);
@@ -30,6 +37,11 @@ public class RoleService {
 		Role role = roleDao.findById(id);
 		roleDao.closeCurrentSession();
 		return role;
+	}
+
+	public Role checkIfUnique(String roleText){
+
+		return roleDao.findByRoleName(roleText);
 	}
 
 	public void delete(Long id) {

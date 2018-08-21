@@ -24,7 +24,7 @@ public class Role{
 		return role;
 	}
 
-	public void setroleId(Long newRoleId){
+	public void setRoleId(Long newRoleId){
 		this.roleId = newRoleId;
 	}
 

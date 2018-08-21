@@ -3,14 +3,19 @@ package com.pdomingo.app;
 import java.io.IOException;
 import java.util.*;
 
+
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
+
+
 
 public class App {
 
 
 	public static void main(String[] args) {
+		PersonIO personIO = new PersonIO();
+
 		// Name sample
 		Name name = new Name();
 		name.setTitle("Dr.");
@@ -33,12 +38,20 @@ public class App {
 		contact.setContactType("Phone number");
 		//Role sample
 		Set<Role> roles = new HashSet<Role>();
-		roles.add(new Role("Janitor"));
-		roles.add(new Role("Data Scientist"));
+		//roles.add(new Role("Janitor"));
+		//roles.add(new Role("Data Scientist"));
 
 		Person person1 = new Person(name, address, new Date(), 1.5, new Date(), true);
 		contact.setPerson(person1);
 		contacts.add(contact);
+
+		RoleService roleService = new RoleService();
+		//Role newRole = roleService.checkIfUnique("Janitor");
+		//roles.add(newRole);
+		Role newerRole = new Role();
+		newerRole.setRoleId(Long.valueOf(2));
+		newerRole.setRole("Data Scientist");
+		roles.add(newerRole);
 
 		person1.setRoles(roles);
 		person1.setContactInfo(contacts);
@@ -55,6 +68,7 @@ public class App {
 		}
 
 		System.out.println("*** Persist - end ***");
+		/*
 		System.out.println("*** Update - start ***");
 		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getContactInfo() +"\n\n\n\n");
 		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getRoles() +"\n\n\n\n");
@@ -78,6 +92,7 @@ public class App {
 		System.out.println("*** DeleteAll - end ***");
 
 		 System.exit(0);
+		 */
 	}
 
 }

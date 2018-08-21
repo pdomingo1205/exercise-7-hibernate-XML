@@ -66,14 +66,14 @@
 
 		</property>
 
-		<set name="contactInfo" table="contact_info"  inverse="true" lazy="true" fetch="select" cascade="all">
+		<set name="contactInfo" table="contact_info"  inverse="true" lazy="false" fetch="select" cascade="merge">
 			<key>
 				<column name="PERSON_ID" not-null="true" />
 			</key>
 			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
-		<set name="roles" table="PERSON_ROLES" cascade="save-update">
+		<set name="roles" table="PERSON_ROLES" lazy="true" fetch="select" cascade="all" >
             <key column="PERSON_ID" />
             <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role"/>
         </set>

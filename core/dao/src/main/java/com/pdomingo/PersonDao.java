@@ -73,6 +73,7 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	public void persist(Person entity) {
 		System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
 		getCurrentSession().saveOrUpdate(entity);
+		getCurrentSession().flush();
 	}
 
 	public void update(Person entity) {
@@ -81,8 +82,6 @@ public class PersonDao implements DaoInterface<Person, Long> {
 
 	public Person findById(Long id) {
 		Person person = (Person) getCurrentSession().get(Person.class, id);
-
-		System.out.println("\n\n\n pdao findid" + person.getName() + "\n\n\n");
 		return person;
 	}
 
