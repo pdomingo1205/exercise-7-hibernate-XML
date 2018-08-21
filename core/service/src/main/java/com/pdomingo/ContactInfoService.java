@@ -26,6 +26,7 @@ public class ContactInfoService {
 	}
 
 	public ContactInfo findById(Long id) {
+		
 		contactInfoDao.openCurrentSession();
 		ContactInfo contactInfo = contactInfoDao.findById(id);
 		contactInfoDao.closeCurrentSession();

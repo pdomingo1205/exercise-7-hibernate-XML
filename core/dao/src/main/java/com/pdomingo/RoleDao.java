@@ -2,15 +2,18 @@ package com.pdomingo.dao;
 
 import java.util.List;
 
+import java.util.Set;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.Criteria;
 import org.hibernate.MappingException;
 import org.hibernate.Query;
-
+import org.hibernate.criterion.Restrictions;
 
 import com.pdomingo.model.role.Role;
 
@@ -74,6 +77,10 @@ public class RoleDao implements DaoInterface<Role, Long> {
 		getCurrentSession().saveOrUpdate(entity);
 	}
 
+	public void persist(Set<Role> entity) {
+		getCurrentSession().saveOrUpdate(entity);
+	}
+
 	public void update(Role entity) {
 		getCurrentSession().update(entity);
 	}
@@ -86,6 +93,14 @@ public class RoleDao implements DaoInterface<Role, Long> {
 	public void delete(Role entity) {
 		getCurrentSession().delete(entity);
 	}
+
+	public Role findByRoleName(String roleName){
+		Criteria criteria = getCurrentSession().createCriteria(Role.class);
+		Role role = (Role) criteria.add(Restrictions.eq("role", roleName))
+		                             .uniqueResult();
+		return role;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public List<Role> findAll() {
