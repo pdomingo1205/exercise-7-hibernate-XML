@@ -32,6 +32,11 @@ public class Role{
 		this.role = newRole;
 	}
 
+	@Override
+	public String toString(){
+		return roleId + ": " + role;
+	}
+
 
 
 }

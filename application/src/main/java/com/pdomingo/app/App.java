@@ -7,15 +7,25 @@ import java.util.*;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
-
+import org.apache.log4j.Logger;
 
 
 public class App {
-
+final static Logger logger = Logger.getLogger(App.class);
 
 	public static void main(String[] args) {
-		PersonIO personIO = new PersonIO();
 
+		PersonIO personIO = new PersonIO();
+		ContactIO contactIO = new ContactIO();
+
+		personIO.createPerson();
+		contactIO.createContact();
+//		ContactIO contactIO = new ContactIO();
+
+		//contactIO.deleteContact();
+
+
+		/*
 		// Name sample
 		Name name = new Name();
 		name.setTitle("Dr.");
@@ -45,19 +55,27 @@ public class App {
 		contact.setPerson(person1);
 		contacts.add(contact);
 
-		RoleService roleService = new RoleService();
+		//RoleService roleService = new RoleService();
 		//Role newRole = roleService.checkIfUnique("Janitor");
 		//roles.add(newRole);
 		Role newerRole = new Role();
-		newerRole.setRoleId(Long.valueOf(2));
-		newerRole.setRole("Data Scientist");
-		roles.add(newerRole);
+		newerRole.setRoleId(Long.valueOf(1));
+		newerRole.setRole("Super Saiyan");
+		//roles.add(newerRole);
 
 		person1.setRoles(roles);
 		person1.setContactInfo(contacts);
-
 		PersonService personService = new PersonService();
 		personService.persist(person1);
+		*/
+
+		/*
+		RoleService personService = new RoleService();
+		System.out.println("UNIQUEEE " + personService.checkIfUnique("Data Scientist"));
+		Role role = personService.checkIfUnique("Hater");
+		System.out.println("ROOOOLE" + role);
+		System.out.println("ROOOOLETEEEXT" + role.getRole());
+
 		System.out.println("*** Persist - start ***");
 
 		List<Person> persons1 = personService.findAll();
@@ -68,7 +86,6 @@ public class App {
 		}
 
 		System.out.println("*** Persist - end ***");
-		/*
 		System.out.println("*** Update - start ***");
 		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getContactInfo() +"\n\n\n\n");
 		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getRoles() +"\n\n\n\n");

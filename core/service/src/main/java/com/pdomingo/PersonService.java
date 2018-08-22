@@ -29,7 +29,7 @@ public class PersonService {
 	public Person findById(Long id) {
 		personDao.openCurrentSession();
 		Person person = personDao.findById(id);
-		System.out.println("pservice findbyid\n\n\n" + person.getName() + "\n\n\n");
+		//System.out.println("pservice findbyid\n\n\n" + person.getName() + "\n\n\n");
 		//personDao.closeCurrentSession();
 		return person;
 	}

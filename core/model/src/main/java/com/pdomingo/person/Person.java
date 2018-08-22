@@ -52,7 +52,7 @@ public class Person{
 		return GWA;
 	}
 
-	public Date getDateHired(){
+	public Date getDateHired() {
 		return dateHired;
 	}
 
@@ -91,6 +91,7 @@ public class Person{
 	public void setDateHired(Date newDateHired){
 		this.dateHired = newDateHired;
 	}
+
 
 	public void setCurrEmployed(Boolean newEmploymentStatus){
 		this.currEmployed = newEmploymentStatus;

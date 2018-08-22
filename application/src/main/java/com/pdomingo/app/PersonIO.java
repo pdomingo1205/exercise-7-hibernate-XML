@@ -15,7 +15,9 @@ import static com.pdomingo.service.InputValidation.Validate.*;
 
 public class PersonIO {
 	Scanner scan = new Scanner(System.in);
-
+	RoleIO roleIO = new RoleIO();
+	ContactIO contactIO = new ContactIO();
+	PersonService personService = new PersonService();
 
 	public PersonIO(){
 
@@ -45,13 +47,13 @@ public class PersonIO {
 		name.setTitle(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input First Name \n");
-		name.setFirstName(InputValidation.Validate.getInput());
+		name.setFirstName(InputValidation.Validate.getRequiredInput());
 
 		System.out.println("\n \t Input Middle Name \n");
 		name.setMiddleName(InputValidation.Validate.getInput());
 
 		System.out.println("\n \t Input Last Name \n");
-		name.setLastName(InputValidation.Validate.getInput());
+		name.setLastName(InputValidation.Validate.getRequiredInput());
 
 		System.out.println("\n \t Input Suffix \n");
 		name.setSuffix(InputValidation.Validate.getInput());
@@ -77,19 +79,41 @@ public class PersonIO {
 		return address;
 	}
 
-
-
-	public Date askBirthDay(){
-		System.out.println("\n \t Input Birthday in (YYYY-MM-DD) \n");
-
+	public Date askDate(String dateType){
+		System.out.println(String.format("\n \t Input %s in (YYYY-MM-DD) \n", dateType));
 		return InputValidation.Validate.getDate();
 	}
 
-
-
 	public void createPerson(){
-		Person person = new Person();
-		person.setName(askName());
+		Name name = askName();
+		Address address = askAddress();
+		Date birthDay = askDate("Birth Day");
+		Date hireDate = null;
+
+		Boolean employmentStatus = InputValidation.Validate.getYesOrNo("\n\t--- Are you currently employed? Y/N ---\n");
+		if(employmentStatus.equals(true)){
+			hireDate = askDate("Date Hired");
+		}
+
+		Double GWA = InputValidation.Validate.getGWA();
+		ContactInfo contact = contactIO.editContact(new ContactInfo());
+		Role role = roleIO.addRole();
+
+		Person person = new Person(name, address, birthDay, GWA, hireDate, employmentStatus);
+
+		Set<ContactInfo> contacts = new HashSet<ContactInfo>();
+		contact.setPerson(person);
+		contacts.add(contact);
+
+		Set<Role> roles = new HashSet<Role>();
+		roles.add(role);
+
+		person.setContactInfo(contacts);
+		person.setRoles(roles);
+
+		personService.persist(person);
+		//Person person = new Person();
+
 
 	}
 

@@ -14,12 +14,16 @@ import static com.pdomingo.service.InputValidation.Validate.*;
 
 
 public class RoleIO {
-
+	RoleService roleService = new RoleService();
 
 	public RoleIO(){
 
 	}
 
+	public static void clearScreen() {
+	    System.out.print("\033[H\033[2J");
+	    System.out.flush();
+	}
 	public void chooseOperation(){
 
 		System.out.println("\n \t--- Choose Operation --- \n");
@@ -32,36 +36,92 @@ public class RoleIO {
 
 	}
 
+
+	public Role addRole(){
+		Role role = new Role();
+		String roleName = askRole();
+
+		Role existingRole = roleService.checkIfUnique(roleName);
+
+        return role;
+	}
+
+	public void createRole(){
+		Role role = new Role();
+		String roleName = askRole();
+
+		role = roleService.checkIfUnique(roleName);
+
+        roleService.persist(role);
+	}
+
 	private String askRole(){
 
-		System.out.println("\n \tInput role \n");
+		System.out.println("\n \t--- Input name of Role ---\n");
 
 		String inputRole = InputValidation.Validate.getRequiredInput();
 
 		return inputRole;
 	}
 
-	public Role createRole(){
-		Role role = new Role();
-
-        role.setRole(askRole());
-        return role;
-	}
-
 	public void readRole(){
+
+		System.out.println("\n\t Input ID of role to read *Use List to find ID's \n");
+		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
+		Role role;
+
+		if(roleService.checkIfExists(inputId)){
+			role = roleService.findById(inputId);
+
+			System.out.println(role);
+		}
+		else{
+			System.out.println("\n\t Role does not exist \n");
+		}
 
 	}
 
 	public void updateRole(){
 
+		System.out.println("\n\t Input ID of role to update *Use List to find ID's \n");
+		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
+		Role role;
+
+		if(roleService.checkIfExists(inputId)){
+			role = roleService.findById(inputId);
+
+			System.out.println("\n\t Input new Role \n");
+			String newRole = InputValidation.Validate.getRequiredInput();
+			role.setRole(newRole);
+
+			roleService.update(role);
+
+		}
+		else{
+			System.out.println("\n\t Role does not exist \n");
+		}
+
+
 	}
 
 	public void deleteRole(){
 
+		System.out.println("\n\t Input ID of role to delete *Use List to find ID's \n");
+		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
+		Role role;
+
+		if(roleService.checkIfExists(inputId)){
+
+			roleService.delete(inputId);
+
+		}
+		else{
+			System.out.println("\n\t Role does not exist \n");
+		}
 	}
 
 	public void listRoles(){
-
+		System.out.println(roleService.findAll());
 	}
 
 }

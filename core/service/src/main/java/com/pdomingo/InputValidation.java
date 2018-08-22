@@ -20,13 +20,12 @@ public class InputValidation{
 
 	public static final class Validate{
 		static Scanner scan = new Scanner(System.in);
+		final static String DOUBLE_PATTERN = "[0-9]+(\\.){0,1}[0-9]*";
 
 		public static String getInput() {
 			String text = scan.nextLine();
-			if (text.isEmpty()) {
-				text = null;
-			}
-			return text;
+
+			return StringUtils.defaultString(text);
     	}
 
 		public static String getRequiredInput() {
@@ -38,10 +37,35 @@ public class InputValidation{
 				if(StringUtils.isNotBlank(text) == false){
 					System.out.println("Invalid Input");
 				}
-			}while(StringUtils.isNotBlank(text));
+
+			}while(StringUtils.isNotBlank(text) == false);
 
 
 			return text;
+		}
+
+		public static Boolean getYesOrNo(String question) {
+			System.out.println(question);
+			String text;
+			Boolean isYes = true;
+
+			do{
+				text = scan.nextLine();
+
+				if(text.equals("Y") == false && text.equals("N") == false){
+					System.out.println("Invalid Input");
+				}else{
+					if(text.equals("Y")){
+						isYes = true;
+					}else{
+						isYes = false;
+					}
+				}
+
+			}while(text.equals("Y") == false && text.equals("N") == false);
+
+
+			return isYes;
 		}
 
 		public static Integer getInteger() {
@@ -100,8 +124,7 @@ public class InputValidation{
 				if(mobileNumber.matches(matcher) == false){
 					System.out.println("Invalid Input");
 				}
-			}while(mobileNumber.matches(matcher));
-
+			}while(mobileNumber.matches(matcher) == false);
 
 			return mobileNumber;
 		}
@@ -116,11 +139,38 @@ public class InputValidation{
 					System.out.println("Invalid Email Address");
 				}
 
-			}while(EmailValidator.getInstance().isValid(text));
+			}while(EmailValidator.getInstance().isValid(text) == false);
 
 
 			return text;
 		}
+
+		public static Double getGWA(){
+			System.out.println("\n \t --- Input GWA ---");
+			String input;
+			DecimalFormat df = new DecimalFormat("#.##");
+			String formattedGWA;
+			Double GWA = 0.0;
+			do{
+				do{
+					input = scan.nextLine();
+
+					if(input.matches(DOUBLE_PATTERN) == false){
+						System.out.println("Invalid Input");
+					}
+
+				}while(input.matches(DOUBLE_PATTERN) == false);
+				formattedGWA = df.format(Double.valueOf(input));
+				GWA = Double.valueOf(formattedGWA);
+
+				if(GWA > 5.0 || GWA < 1.0){
+					System.out.println("Invalid Input");
+				}
+			}while(GWA > 5.0 || GWA < 1.0);
+
+			return GWA;
+		}
+
 
 
 
