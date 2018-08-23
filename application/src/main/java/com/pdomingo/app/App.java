@@ -7,19 +7,21 @@ import java.util.*;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 
 public class App {
-final static Logger logger = Logger.getLogger(App.class);
+//final static Logger logger = Logger.getLogger(App.class);
 
 	public static void main(String[] args) {
 
-		PersonIO personIO = new PersonIO();
-		ContactIO contactIO = new ContactIO();
+		//Menu menu = new Menu();
+		//menu.start();
+		RoleIO roleIO = new RoleIO();
 
-		personIO.createPerson();
-		contactIO.createContact();
+		System.out.println(roleIO.addRole());
+		//personIO.createPerson();
+		//contactIO.createContact();
 //		ContactIO contactIO = new ContactIO();
 
 		//contactIO.deleteContact();

@@ -28,7 +28,6 @@ public class RoleService {
 	}
 
 	public void update(Role entity) {
-
 		roleDao.openCurrentSessionwithTransaction();
 		roleDao.update(entity);
 		System.out.println("\n\t Role updated! \n");
@@ -67,6 +66,8 @@ public class RoleService {
 				role = new Role();
 				role.setRole(roleText);
 			}
+
+			System.out.println("Quack" + role);
 			roleDao.closeCurrentSession();
 		}catch(Exception e){
 

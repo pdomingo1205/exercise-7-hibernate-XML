@@ -92,7 +92,7 @@ public class InputValidation{
 			do{
 
 				try{
-
+						isValid = true;
 						inValue = getInput();
 						date = new SimpleDateFormat("YYYY-MM-DD").parse(inValue);
 				}catch(ParseException e){

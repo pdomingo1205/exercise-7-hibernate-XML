@@ -85,19 +85,18 @@ public class RoleDao implements DaoInterface<Role, Long> {
 
 	public void update(Role entity) {
 		getCurrentSession().update(entity);
-		clearScreen();
 	}
 
 	public Role findById(Long id) {
 
 		Role role = (Role) getCurrentSession().get(Role.class, id);
-		clearScreen();
+		//clearScreen();
 		return role;
 	}
 
 	public void delete(Role entity) {
 		getCurrentSession().delete(entity);
-		clearScreen();
+		//clearScreen();
 	}
 
 	public Role findByRoleName(String roleName){
@@ -109,21 +108,21 @@ public class RoleDao implements DaoInterface<Role, Long> {
 		}catch(Exception e){
 
 		}
-		clearScreen();
+		//clearScreen();
 		return role;
 	}
 
 
 	@SuppressWarnings("unchecked")
 	public List<Role> findAll() {
-		System.out.println("Searching..");
+	//	System.out.println("Searching..");
 		List<Role> roles = (List<Role>) getCurrentSession().createQuery("from Role").list();
-		clearScreen();
+		//clearScreen();
 		return roles;
 	}
 
 	public void deleteAll() {
-		System.out.println("Searching..");
+		//System.out.println("Searching..");
 		List<Role> entityList = findAll();
 		for (Role entity : entityList) {
 			delete(entity);

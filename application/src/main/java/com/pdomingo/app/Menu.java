@@ -9,6 +9,9 @@ import com.pdomingo.service.*;
 
 public class Menu {
 	Scanner scan = new Scanner(System.in);
+	PersonIO personIO = new PersonIO();
+	ContactIO contactIO = new ContactIO();
+	RoleIO roleIO = new RoleIO();
 
 	public Menu(){
 
@@ -18,134 +21,42 @@ public class Menu {
 		scan = newScanner;
 	}
 
-	public String chooseOperation(){
-		String input;
+	public Integer chooseCategory(){
 
-		System.out.println("\n \t--- Choose Operation --- \n");
-		System.out.println("\n \ta. Create Person");
-		System.out.println("\n \tb. Read Person");
-		System.out.println("\n \tc. Update Person");
-		System.out.println("\n \td. Delete Person");
-		System.out.println("\n \te. List Persons");
-		System.out.println("\n \tf. Manage Person (Role/Contact Info)");
-		System.out.println("\n \tg. Exit");
+		System.out.println("\n \t--- Choose Category --- \n");
+		System.out.println("\n \t1. Person");
+		System.out.println("\n \t2. Role");
+		System.out.println("\n \t3. Contact Info");
+		System.out.println("\n \t4. Exit");
 
-
-		input = scan.nextLine();
-		return input;
+		return InputValidation.Validate.getIntegerInRange(1,4);
 	}
 
-	public void createPerson(){
+	public void doChooseCategory(Integer choice){
 
-	}
-
-	public void readPerson(){
-
-	}
-
-	public void updatePerson(){
-
-	}
-
-	public void deletePerson(){
-
-	}
-
-	public void listPersons(){
-
-	}
-
-	public void managePerson(){
-
+		switch(choice){
+			case 1:
+				personIO.start();
+				break;
+			case 2:
+				//roleIO.start();
+				break;
+			case 3:
+				//contactIO.start();
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void start(){
-		String input;
-		input = chooseOperation();
-
-		switch(input.toUpperCase()) {
-			case "A":
-
-				break;
-
-			case "B":
-		}
+		Integer choice;
+		do{
+			choice = chooseCategory();
+			doChooseCategory(choice);
+		}while(choice != 4);
 
 	}
 
-	public void newPerson(){
-		System.out.println("");
-	}
 
-	/*
-	public void start() {
-		// Name sample
-		Name name = new Name();
-		name.setTitle("Dr.");
-		name.setFirstName("John");
-		name.setMiddleName("H");
-		name.setLastName("Doe");
-		name.setSuffix("jr.");
-
-		//Address sample
-		Address address = new Address();
-		address.setStreetNo(666);
-		address.setBarangay("Noland Street");
-		address.setMunicipality("Malabon");
-		address.setZipCode("1020");
-
-		//Contact Sample
-		Set<ContactInfo> contacts =  new HashSet<ContactInfo>();
-		ContactInfo contact = new ContactInfo();
-		contact.setContactInfo("09195545454");
-		contact.setContactType("Phone number");
-		//Role sample
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(new Role("Janitor"));
-		roles.add(new Role("Data Scientist"));
-
-		Person person1 = new Person(name, address, new Date(), 1.5, new Date(), true);
-		contact.setPerson(person1);
-		contacts.add(contact);
-
-		person1.setRoles(roles);
-		person1.setContactInfo(contacts);
-
-		PersonService personService = new PersonService();
-		personService.persist(person1);
-		System.out.println("*** Persist - start ***");
-
-		List<Person> persons1 = personService.findAll();
-		System.out.println("Persons Persisted are :");
-
-		for (Person b : persons1) {
-			System.out.println("-" + b.toString());
-		}
-
-		System.out.println("*** Persist - end ***");
-		System.out.println("*** Update - start ***");
-		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getContactInfo() +"\n\n\n\n");
-		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getRoles() +"\n\n\n\n");
-		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getAddress() +"\n\n\n\n");
-		System.out.println("\n\n\n\n" + personService.findById(person1.getPersonId()).getName() +"\n\n\n\n");
-		personService.update(person1);
-		Long id1 = person1.getPersonId();
-
-		Person another = personService.findById(id1);
-		System.out.println("Person found with id " + id1 + " is =>" + another.toString());
-		System.out.println("*** Find - end ***");
-		System.out.println("*** Delete - start ***");
-		personService.delete(id1);
-		System.out.println("Deleted person with id " + id1 + ".");
-		System.out.println("Now all persons are " + personService.findAll().size() + ".");
-		System.out.println("*** Delete - end ***");
-		System.out.println("*** FindAll - start ***");
-
-		personService.deleteAll();
-		System.out.println("Persons found are now " + personService.findAll().size());
-		System.out.println("*** DeleteAll - end ***");
-
-		 System.exit(0);
-	}
-*/
 }

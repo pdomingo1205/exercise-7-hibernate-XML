@@ -42,7 +42,7 @@ public class RoleIO {
 		String roleName = askRole();
 
 		Role existingRole = roleService.checkIfUnique(roleName);
-
+		System.out.println(existingRole);
         return role;
 	}
 
@@ -93,7 +93,6 @@ public class RoleIO {
 			System.out.println("\n\t Input new Role \n");
 			String newRole = InputValidation.Validate.getRequiredInput();
 			role.setRole(newRole);
-
 			roleService.update(role);
 
 		}

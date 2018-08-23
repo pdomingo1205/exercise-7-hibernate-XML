@@ -12,7 +12,8 @@ import org.hibernate.MappingException;
 import org.hibernate.Query;
 
 
-import com.pdomingo.model.person.Person;
+import com.pdomingo.model.person.*;
+import com.pdomingo.model.role.Role;
 
 public class PersonDao implements DaoInterface<Person, Long> {
 
@@ -71,13 +72,15 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	public void persist(Person entity) {
-		System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
+		//System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
 		getCurrentSession().saveOrUpdate(entity);
 		getCurrentSession().flush();
 	}
 
 	public void update(Person entity) {
+
 		getCurrentSession().update(entity);
+		getCurrentSession().flush();
 	}
 
 	public Person findById(Long id) {
@@ -94,6 +97,27 @@ public class PersonDao implements DaoInterface<Person, Long> {
 		List<Person> persons = (List<Person>) getCurrentSession().createQuery("from Person").list();
 		return persons;
 	}
+
+	public List<Person> findAllOrderBy(String field, String order) {
+		List<Person> persons = (List<Person>) getCurrentSession().createQuery(String.format("from Person ORDER BY %s %s", field, order)).list();
+		return persons;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Role> findPersonRoles(Long id) {
+		//List<Role> roles = (List<Role>) getCurrentSession().createQuery("select role from person_roles inner join role on role.role_id = person_roles.role_id where person_roles.person_id=1").list();
+		List<Role> roles = (List<Role>) getCurrentSession().createQuery("select role from Person person join person.roles role where person.personId = "+id).list();
+		return roles;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> findPersonContacts(Long id) {
+		//List<Role> roles = (List<Role>) getCurrentSession().createQuery("select role from person_roles inner join role on role.role_id = person_roles.role_id where person_roles.person_id=1").list();
+		List<String> roles = (List<String>) getCurrentSession().createQuery("select contactInfo from ContactInfo where person.personId = "+id).list();
+
+		return roles;
+	}
+
 
 	public void deleteAll() {
 		List<Person> entityList = findAll();

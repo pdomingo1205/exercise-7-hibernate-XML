@@ -104,4 +104,9 @@ public class Person{
 	public void setRoles(Set<Role> newRoles){
 		this.roles = newRoles;
 	}
+
+	@Override
+	public String toString(){
+		return(String.format("|%s\t|%s\t|%s\t|%f\t|%s\t|", name, address, bDay, GWA, dateHired));
+	}
 }
