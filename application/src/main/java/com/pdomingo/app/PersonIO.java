@@ -42,7 +42,7 @@ public class PersonIO {
 
 	}
 
-	public Integer doChooseOperation(Integer choice){
+	public void doChooseOperation(Integer choice){
 
 		switch(choice){
 			case 1:
@@ -61,12 +61,11 @@ public class PersonIO {
 				askListBy();
 				break;
 			case 6:
+				managePerson();
 				break;
 			case 7:
 				break;
 		}
-
-		return InputValidation.Validate.getIntegerInRange(1,7);
 
 	}
 
@@ -82,10 +81,10 @@ public class PersonIO {
 		System.out.println("\n \t--- Input Middle Name ---\n");
 		name.setMiddleName(InputValidation.Validate.getInput());
 
-		System.out.println("\n \t Input Last Name \n");
+		System.out.println("\n \t--- Input Last Name ---\n");
 		name.setLastName(InputValidation.Validate.getRequiredInput());
 
-		System.out.println("\n \t Input Suffix \n");
+		System.out.println("\n \t--- Input Suffix ---\n");
 		name.setSuffix(InputValidation.Validate.getInput());
 
 		return name;
@@ -94,23 +93,23 @@ public class PersonIO {
 	public Address askAddress(){
 		Address address = new Address();
 
-		System.out.println("\n \t Input Street # \n");
+		System.out.println("\n \t--- Input Street # ---\n");
 		address.setStreetNo(InputValidation.Validate.getInteger());
 
-		System.out.println("\n \t Input Barangay \n");
+		System.out.println("\n \t--- Input Barangay ---\n");
 		address.setBarangay(InputValidation.Validate.getInput());
 
-		System.out.println("\n \t Input Municipality \n");
+		System.out.println("\n \t--- Input Municipality ---\n");
 		address.setMunicipality(InputValidation.Validate.getInput());
 
-		System.out.println("\n \t Input Zip Code \n");
+		System.out.println("\n \t--- Input Zip Code ---\n");
 		address.setZipCode(InputValidation.Validate.getInput());
 
 		return address;
 	}
 
 	public Date askDate(String dateType){
-		System.out.println(String.format("\n \t Input %s in (YYYY-MM-DD) \n", dateType));
+		System.out.println(String.format("\n \t--- Input %s in (YYYY-MM-DD) ---\n", dateType));
 		return InputValidation.Validate.getDate();
 	}
 
@@ -119,7 +118,7 @@ public class PersonIO {
 		Address address = askAddress();
 		Date birthDay = askDate("Birth Day");
 		Date hireDate = askDate("Date Hired");
-		Boolean employmentStatus = InputValidation.Validate.getYesOrNo("\n\t--- Is currently employed? Y/N ---\n");
+		Boolean employmentStatus = InputValidation.Validate.getYesOrNo("\n\t --- Is currently employed? Y/N ---\n");
 		Double GWA = InputValidation.Validate.getGWA();
 
 		ContactInfo contact = contactIO.editContact(new ContactInfo());
@@ -161,7 +160,7 @@ public class PersonIO {
 
 	public void readPerson(){
 
-			System.out.println("\n\t--Input ID of Person to read--\n");
+			System.out.println("\n\t--- Input ID of Person to read ---\n");
 			Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 			Person person;
 
@@ -176,6 +175,7 @@ public class PersonIO {
 				if(person.getCurrEmployed()){
 					personDetail.append(String.format("\n\t--- Hired in : %s", person.getDateHired()));
 				}
+
 				personDetail.append(String.format("\n\t--- Contact Information : %s", listContacts(inputId)));
 				personDetail.append(String.format("\n\t--- Roles : %s", listRole(inputId)));
 
@@ -190,16 +190,16 @@ public class PersonIO {
 
 	private Integer askUpdateChoice(){
 
-		System.out.println("\n\t---Choose what to update *Use Manage Person to edit contacts/Roles \n");
-		System.out.println("\n\t---1. Name \n");
-		System.out.println("\n\t---2. Address \n");
-		System.out.println("\n\t---3. GWA \n");
-		System.out.println("\n\t---4. BirthDay \n");
-		System.out.println("\n\t---5. Set Hire Date\n");
-		System.out.println("\n\t---6. Set Employment Status\n");
-		System.out.println("\n\t---7. Exit \n");
+		System.out.println("\n\t--- Choose what to update *Use Manage Person to edit contacts/Roles ---\n");
+		System.out.println("\n\t1. Name \n");
+		System.out.println("\n\t2. Address \n");
+		System.out.println("\n\t3. GWA \n");
+		System.out.println("\n\t4. BirthDay \n");
+		System.out.println("\n\t5. Set Hire Date\n");
+		System.out.println("\n\t6. Set Employment Status\n");
+		System.out.println("\n\t7. Exit \n");
 
-		Integer choice = InputValidation.Validate.getIntegerInRange(1,5);
+		Integer choice = InputValidation.Validate.getIntegerInRange(1,7);
 		return choice;
 	}
 
@@ -234,7 +234,7 @@ public class PersonIO {
 	}
 
 	public void updatePerson(){
-		System.out.println("\n\t ---Input ID of Person to update *Use List to find ID's \n");
+		System.out.println("\n\t---Input ID of Person to update *Use List to find ID's ---\n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Person person;
 
@@ -251,7 +251,7 @@ public class PersonIO {
 
 		}
 		else{
-			System.out.println("\n\t Person does not exist \n");
+			System.out.println("\n\t!-- Person does not exist --!\n");
 		}
 	}
 
@@ -271,35 +271,37 @@ public class PersonIO {
 	}
 
 	public void askListBy(){
-		System.out.println("\n\t ---List by? \n");
-		System.out.println("\n\t ---1.GWA \n");
-		System.out.println("\n\t ---2.Date Hired \n");
-		System.out.println("\n\t ---3.Last Name \n");
-		System.out.println("\n\t ---4.No Order \n");
+		System.out.println("\n\t --- List by? ---\n");
+		System.out.println("\n\t 1.GWA \n");
+		System.out.println("\n\t 2.Date Hired \n");
+		System.out.println("\n\t 3.Last Name \n");
+		System.out.println("\n\t 4.No Order \n");
 
 		doListPerson(InputValidation.Validate.getIntegerInRange(1,4));
 
 	}
 
 	public Integer askOrder(){
-		System.out.println("\n\t ---Order by? \n");
-		System.out.println("\n\t ---1.Ascending \n");
-		System.out.println("\n\t ---2.Descending \n");
+		System.out.println("\n\t --- Order by? ---\n");
+		System.out.println("\n\t 1.Ascending \n");
+		System.out.println("\n\t 2.Descending \n");
 
 		return InputValidation.Validate.getIntegerInRange(1,2);
 	}
 
 	public void doListPerson(Integer choice){
-		Integer order = askOrder();
+		Integer order;
+
 		switch(choice){
 			case 1:
-				listPersonsByGWA(choice);
+
+				listPersonsByGWA(askOrder());
 				break;
 			case 2:
-				listPersonsBy("date_hired", choice);
+				listPersonsBy("date_hired", askOrder());
 				break;
 			case 3:
-				listPersonsBy("last_name", choice);
+				listPersonsBy("last_name", askOrder());
 				break;
 			case 4:
 				listPersonsBy();
@@ -309,7 +311,7 @@ public class PersonIO {
 
 	public void listPersonsBy(){
 		for (Person p : personService.findAll()) {
-			System.out.println(p);
+			System.out.println(String.format("ID:%s %s", p.getPersonId(), p));
 		}
 	}
 
@@ -335,7 +337,6 @@ public class PersonIO {
 
 	}
 
-
 	public void listPersonsBy(String property, Integer order){
 
 		for (Person p : personService.findOrderBy(property, order)) {
@@ -345,48 +346,54 @@ public class PersonIO {
 	}
 
 	private Integer chooseManage(){
-		System.out.println("\n\t--Choose what to manage--\n");
-		System.out.println("\n\t--1.Role--\n");
-		System.out.println("\n\t--2.Contact Info--\n");
+		System.out.println("\n\t---Choose what to manage---\n");
+		System.out.println("\n\t1.Role\n");
+		System.out.println("\n\t2.Contact Info\n");
 		return InputValidation.Validate.getIntegerInRange(1,2);
 	}
 
+	private void manageRole(Person person){
+
+		System.out.println("\n\t--- Choose Operation ---\n");
+		System.out.println("\n\t1.Add Role\n");
+		System.out.println("\n\t2.Delete Role\n");
+		System.out.println("\n\t3.Update Role\n");
+
+		switch(InputValidation.Validate.getInteger()){
+			case 1:
+				person.getRoles().add(roleIO.addRole());
+				break;
+			case 2:
+				System.out.println("--- Input name of Role to Delete ---");
+				person.getRoles().remove(InputValidation.Validate.getRequiredInput());
+				break;
+			case 3:
+				System.out.println("--- Input name of Role to Update ---");
+				person.getRoles().remove(InputValidation.Validate.getRequiredInput());
+				person.getRoles().add(roleIO.addRole());
+				System.out.println(person.getRoles());
+				break;
+			case 4:
+				listRole(person.getPersonId());
+			break;
+
+		}
+		personService.updateRole(person);
+
+	}
+
 	public void managePerson(){
-		System.out.println("\n\t--Input ID of Person to Manage--\n");
+		System.out.println("\n\t--- Input ID of Person to Manage ---\n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Person person;
 
 		if(personService.checkIfExists(inputId)){
 			person = personService.findById(inputId);
 			if(chooseManage().equals(1)){
-				try{
-					switch(InputValidation.Validate.getInteger()){
-						case 1:
-							System.out.println("Add Role");
-							person.getRoles().add(roleIO.addRole());
-							break;
-						case 2:
-							System.out.println("Delete Role");
-							person.getRoles().remove(InputValidation.Validate.getRequiredInput());
-							break;
-						case 3:
-							System.out.println("Update Role");
-							person.getRoles().remove(InputValidation.Validate.getRequiredInput());
-							person.getRoles().add(roleIO.addRole());
-							System.out.println(person.getRoles());
-							break;
-						case 4:
-							listRole(inputId);
-							break;
-					}
-				}catch(Exception e){
-
-				}
-
-				personService.update(person);
+				manageRole(person);
 
 			}else{
-
+				
 			}
 		}
 		else{

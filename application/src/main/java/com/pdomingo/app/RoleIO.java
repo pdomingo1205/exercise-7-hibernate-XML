@@ -24,15 +24,36 @@ public class RoleIO {
 	    System.out.print("\033[H\033[2J");
 	    System.out.flush();
 	}
-	public void chooseOperation(){
+	public Integer chooseOperation(){
 
-		System.out.println("\n \t--- Choose Operation --- \n");
-		System.out.println("\n \t1. Create Role");
-		System.out.println("\n \t2. Read Role");
-		System.out.println("\n \t3. Update Role");
-		System.out.println("\n \t4. Delete Role");
-		System.out.println("\n \t5. List Roles");
-		System.out.println("\n \t7. Exit");
+		System.out.println("\n\t--- Choose Operation --- \n");
+		System.out.println("\n\t 1. Create Role");
+		System.out.println("\n\t 2. Update Role");
+		System.out.println("\n\t 3. Delete Role");
+		System.out.println("\n\t 4. List Roles");
+		System.out.println("\n\t 5. Exit");
+
+		return InputValidation.Validate.getIntegerInRange(1,5);
+	}
+
+	public void doChooseOperation(Integer choice){
+
+		switch(choice){
+			case 1:
+				createRole();
+				break;
+			case 2:
+				updateRole();
+				break;
+			case 3:
+				deleteRole();
+				break;
+			case 4:
+				listRoles();
+				break;
+			case 5:
+				break;
+		}
 
 	}
 
@@ -41,8 +62,9 @@ public class RoleIO {
 		Role role = new Role();
 		String roleName = askRole();
 
+
 		Role existingRole = roleService.checkIfUnique(roleName);
-		System.out.println(existingRole);
+		role = existingRole;
         return role;
 	}
 
@@ -66,7 +88,7 @@ public class RoleIO {
 
 	public void readRole(){
 
-		System.out.println("\n\t Input ID of role to read *Use List to find ID's \n");
+		System.out.println("\n\t--- Input ID of role to read *Use List to find ID's --- \n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Role role;
 
@@ -76,28 +98,28 @@ public class RoleIO {
 			System.out.println(role);
 		}
 		else{
-			System.out.println("\n\t Role does not exist \n");
+			System.out.println("\n\t!-- Role does not exist --!\n");
 		}
 
 	}
 
 	public void updateRole(){
 
-		System.out.println("\n\t Input ID of role to update *Use List to find ID's \n");
+		System.out.println("\n\t--- Input ID of role to update *Use List to find ID's ---\n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Role role;
 
 		if(roleService.checkIfExists(inputId)){
 			role = roleService.findById(inputId);
 
-			System.out.println("\n\t Input new Role \n");
+			System.out.println("\n\t--- Input new Role ---\n");
 			String newRole = InputValidation.Validate.getRequiredInput();
 			role.setRole(newRole);
 			roleService.update(role);
 
 		}
 		else{
-			System.out.println("\n\t Role does not exist \n");
+			System.out.println("\n\t!-- Role does not exist --!\n");
 		}
 
 
@@ -105,22 +127,31 @@ public class RoleIO {
 
 	public void deleteRole(){
 
-		System.out.println("\n\t Input ID of role to delete *Use List to find ID's \n");
+		System.out.println("\n\t--- Input ID of role to delete *Use List to find ID's ---\n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Role role;
 
 		if(roleService.checkIfExists(inputId)){
-
 			roleService.delete(inputId);
 
 		}
 		else{
-			System.out.println("\n\t Role does not exist \n");
+			System.out.println("\n\t!-- Role does not exist --!\n");
 		}
 	}
 
 	public void listRoles(){
-		System.out.println(roleService.findAll());
+		for (Role r : roleService.findAll()) {
+			System.out.println(r);
+		}
+	}
+
+	public void start(){
+		Integer choice;
+		do{
+			choice = chooseOperation();
+			doChooseOperation(choice);
+		}while(choice != 5);
 	}
 
 }

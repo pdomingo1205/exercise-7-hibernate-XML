@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.Transaction;
 
 import org.hibernate.MappingException;
 import org.hibernate.Query;
@@ -25,12 +25,12 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		return currentSession;
 	}
 
 	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		currentTransaction = currentSession.beginTransaction();
 		return currentSession;
 	}
@@ -45,10 +45,6 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	private static SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure();
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-		.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
 
 		//Configuration configuration = new Configuration().configure();
         //SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -78,8 +74,15 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	public void update(Person entity) {
-
 		getCurrentSession().update(entity);
+		getCurrentSession().flush();
+	}
+
+	public void updateRole(Person entity) {
+		Person person = findById(entity.getPersonId());
+		getCurrentSession().evict(person);
+		person = entity;
+		getCurrentSession().merge(person);
 		getCurrentSession().flush();
 	}
 

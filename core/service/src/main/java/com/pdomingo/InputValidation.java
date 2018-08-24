@@ -22,6 +22,11 @@ public class InputValidation{
 		static Scanner scan = new Scanner(System.in);
 		final static String DOUBLE_PATTERN = "[0-9]+(\\.){0,1}[0-9]*";
 
+		public static void setScanner(Scanner newScan)
+		{
+			scan = newScan;
+		}
+
 		public static String getInput() {
 			String text = scan.nextLine();
 

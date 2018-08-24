@@ -20,15 +20,32 @@ public class ContactIO {
 
 	}
 
-	public void chooseOperation(){
+	public Integer chooseOperation(){
 
 		System.out.println("\n \t--- Choose Operation --- \n");
-		System.out.println("\n \t1. Create Contact");
-		System.out.println("\n \t2. Read Contact");
-		System.out.println("\n \t3. Update Contact");
-		System.out.println("\n \t4. Delete Contact");
-		System.out.println("\n \t5. List Contacts");
-		System.out.println("\n \t7. Exit");
+		System.out.println("\n \t1. Update Contact");
+		System.out.println("\n \t2. Delete Contact");
+		System.out.println("\n \t3. List Contacts");
+		System.out.println("\n \t4. Exit");
+
+		return InputValidation.Validate.getIntegerInRange(1,4);
+	}
+
+	public void doChooseOperation(Integer choice){
+
+		switch(choice){
+			case 1:
+				updateContact();
+				break;
+			case 2:
+				deleteContact();
+				break;
+			case 3:
+				listContacts();
+				break;
+			case 4:
+				break;
+		}
 
 	}
 
@@ -160,7 +177,17 @@ public class ContactIO {
 	}
 
 	public void listContacts(){
-			System.out.println(contactInfoService.findAll());
+		for (ContactInfo c : contactInfoService.findAll()) {
+			System.out.println(c);
+		}
+	}
+
+	public void start(){
+		Integer choice;
+		do{
+			choice = chooseOperation();
+			doChooseOperation(choice);
+		}while(choice != 4);
 	}
 
 }

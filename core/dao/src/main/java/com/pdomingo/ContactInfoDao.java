@@ -24,12 +24,12 @@ public class ContactInfoDao implements DaoInterface<ContactInfo, Long> {
 	}
 
 	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		return currentSession;
 	}
 
 	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		currentTransaction = currentSession.beginTransaction();
 		return currentSession;
 	}
@@ -73,12 +73,12 @@ public class ContactInfoDao implements DaoInterface<ContactInfo, Long> {
 
 	public void persist(ContactInfo entity) {
 		getCurrentSession().saveOrUpdate(entity);
-		System.out.println("\n\t--- Contact Info Saved! ---");
+		System.out.println("\n\t!!! Contact Info Saved! !!!");
 	}
 
 	public void update(ContactInfo entity) {
 		getCurrentSession().update(entity);
-		System.out.println("\n\t--- Contact Info Updated! ---");
+		System.out.println("\n\t!!! Contact Info Updated! !!!");
 	}
 
 	public ContactInfo findById(Long id) {
@@ -88,7 +88,7 @@ public class ContactInfoDao implements DaoInterface<ContactInfo, Long> {
 
 	public void delete(ContactInfo entity) {
 		getCurrentSession().delete(entity);
-		System.out.println("\n\t--- Contact Info Deleted! ---");
+		System.out.println("\n\t!!! Contact Info Deleted! !!!");
 	}
 
 	@SuppressWarnings("unchecked")

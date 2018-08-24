@@ -10,7 +10,7 @@
 			<generator class="identity"/>
 		</id>
 
-		<many-to-one name="person" class="com.pdomingo.model.person.Person">
+		<many-to-one name="person" class="com.pdomingo.model.person.Person" lazy="false">
 			<column name="PERSON_ID" not-null="true" />
 		</many-to-one>
 

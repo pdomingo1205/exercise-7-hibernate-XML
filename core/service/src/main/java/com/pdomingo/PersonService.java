@@ -28,6 +28,13 @@ public class PersonService {
 		personDao.closeCurrentSessionwithTransaction();
 	}
 
+	public void updateRole(Person entity) {
+		personDao.openCurrentSessionwithTransaction();
+		//System.out.println(entity.getRoles());
+		personDao.updateRole(entity);
+		personDao.closeCurrentSessionwithTransaction();
+	}
+
 	public Person findById(Long id) {
 		personDao.openCurrentSession();
 		Person person = personDao.findById(id);
@@ -52,10 +59,15 @@ public class PersonService {
 	}
 
 	public void delete(Long id) {
-		personDao.openCurrentSessionwithTransaction();
-		Person person = personDao.findById(id);
-		personDao.delete(person);
-		personDao.closeCurrentSessionwithTransaction();
+		try{
+			personDao.openCurrentSessionwithTransaction();
+			Person person = personDao.findById(id);
+			personDao.delete(person);
+			personDao.closeCurrentSessionwithTransaction();
+
+		}finally{
+
+		}
 	}
 
 	public List<Person> findAll() {

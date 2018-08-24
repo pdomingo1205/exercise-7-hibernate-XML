@@ -32,6 +32,8 @@ public class Menu {
 		return InputValidation.Validate.getIntegerInRange(1,4);
 	}
 
+
+
 	public void doChooseCategory(Integer choice){
 
 		switch(choice){
@@ -39,12 +41,13 @@ public class Menu {
 				personIO.start();
 				break;
 			case 2:
-				//roleIO.start();
+				roleIO.start();
 				break;
 			case 3:
-				//contactIO.start();
+				contactIO.start();
 				break;
-			default:
+			case 4:
+				System.exit(0);
 				break;
 		}
 	}

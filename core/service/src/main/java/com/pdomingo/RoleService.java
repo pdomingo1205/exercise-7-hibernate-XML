@@ -17,7 +17,7 @@ public class RoleService {
 	public void persist(Role entity) {
 		roleDao.openCurrentSessionwithTransaction();
 		roleDao.persist(entity);
-		System.out.println("\n\t Role added! \n");
+		System.out.println("\n\t!!! Role added! !!!\n");
 		roleDao.closeCurrentSessionwithTransaction();
 	}
 
@@ -30,7 +30,7 @@ public class RoleService {
 	public void update(Role entity) {
 		roleDao.openCurrentSessionwithTransaction();
 		roleDao.update(entity);
-		System.out.println("\n\t Role updated! \n");
+		System.out.println("\n\t!!! Role updated! !!!\n");
 		roleDao.closeCurrentSessionwithTransaction();
 	}
 
@@ -66,11 +66,9 @@ public class RoleService {
 				role = new Role();
 				role.setRole(roleText);
 			}
-
-			System.out.println("Quack" + role);
 			roleDao.closeCurrentSession();
 		}catch(Exception e){
-
+			System.out.println(e.getMessage());
 		}
 
 		return role;
@@ -83,10 +81,10 @@ public class RoleService {
 			roleDao.openCurrentSessionwithTransaction();
 			Role role = roleDao.findById(id);
 			roleDao.delete(role);
-			System.out.println("\n\t Role deleted \n");
+			System.out.println("\n\t!!! Role deleted !!!\n");
 		}
 		else{
-			System.out.println("\n\t Role does not exist \n");
+			System.out.println("\n\t!-- Role does not exist --!\n");
 		}
 
 		roleDao.closeCurrentSessionwithTransaction();
