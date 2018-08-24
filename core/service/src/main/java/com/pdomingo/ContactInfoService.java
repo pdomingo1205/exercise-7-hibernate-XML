@@ -21,12 +21,29 @@ public class ContactInfoService {
 
 	public void update(ContactInfo entity) {
 		contactInfoDao.openCurrentSessionwithTransaction();
-		contactInfoDao.update(entity);
+		ContactInfo persistentInfo = contactInfoDao.findById(entity.getContactInfoId());
+		persistentInfo.setContactInfo(entity.getContactInfo());
+		persistentInfo.setContactType(entity.getContactType());
+		contactInfoDao.update(persistentInfo);
 		contactInfoDao.closeCurrentSessionwithTransaction();
 	}
 
+	public Boolean checkIfExists(Long Id){
+		Boolean exists = true;
+
+		contactInfoDao.openCurrentSession();
+		ContactInfo contact = contactInfoDao.findById(Id);
+		contactInfoDao.closeCurrentSession();
+
+		if(contact == null){
+			exists = false;
+		}
+
+		return exists;
+	}
+
 	public ContactInfo findById(Long id) {
-		
+
 		contactInfoDao.openCurrentSession();
 		ContactInfo contactInfo = contactInfoDao.findById(id);
 		contactInfoDao.closeCurrentSession();

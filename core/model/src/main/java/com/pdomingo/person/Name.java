@@ -28,7 +28,7 @@ public class Name{
 	public String getTitle(){
 		return title;
 	}
-	
+
 	public String getFirstName(){
 		return firstName;
 	}

@@ -27,12 +27,12 @@ public class RoleDao implements DaoInterface<Role, Long> {
 	}
 
 	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		return currentSession;
 	}
 
 	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = sessionFactory.openSession();
 		currentTransaction = currentSession.beginTransaction();
 		return currentSession;
 	}
@@ -58,6 +58,8 @@ public class RoleDao implements DaoInterface<Role, Long> {
 	}
 
 	public Session getCurrentSession() {
+		System.out.println("Searching..");
+		//clearScreen();
 		return currentSession;
 	}
 
@@ -83,36 +85,55 @@ public class RoleDao implements DaoInterface<Role, Long> {
 
 	public void update(Role entity) {
 		getCurrentSession().update(entity);
+		clearScreen();
 	}
 
 	public Role findById(Long id) {
+
 		Role role = (Role) getCurrentSession().get(Role.class, id);
+		clearScreen();
 		return role;
 	}
 
 	public void delete(Role entity) {
 		getCurrentSession().delete(entity);
+		clearScreen();
 	}
 
 	public Role findByRoleName(String roleName){
-		Criteria criteria = getCurrentSession().createCriteria(Role.class);
-		Role role = (Role) criteria.add(Restrictions.eq("role", roleName))
-		                             .uniqueResult();
+		Role role = new Role();
+		try{
+			Query query= getCurrentSession().createQuery("from Role where role=:name");
+			query.setParameter("name", roleName);
+			role = (Role) query.uniqueResult();
+		}catch(Exception e){
+
+		}
+		clearScreen();
 		return role;
 	}
 
 
 	@SuppressWarnings("unchecked")
 	public List<Role> findAll() {
-		List<Role> roles = (List<Role>) getCurrentSession().createQuery("distinct from Role").list();
+		System.out.println("Searching..");
+		List<Role> roles = (List<Role>) getCurrentSession().createQuery("from Role").list();
+		clearScreen();
 		return roles;
 	}
 
 	public void deleteAll() {
+		System.out.println("Searching..");
 		List<Role> entityList = findAll();
 		for (Role entity : entityList) {
 			delete(entity);
 		}
+		clearScreen();
+	}
+
+	public static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
 	}
 
 }

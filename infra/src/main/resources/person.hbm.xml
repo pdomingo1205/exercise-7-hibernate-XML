@@ -19,13 +19,14 @@
 				<column name="FIRST_NAME"/>
 			</property>
 
+			<property name="middleName" type="string">
+				<column name="MIDDLE_NAME"/>
+			</property>
+
 			<property name="lastName" type="string">
 				<column name="LAST_NAME"/>
 			</property>
 
-			<property name="middleName" type="string">
-				<column name="MIDDLE_NAME"/>
-			</property>
 
 			<property name="suffix" type="string">
 				<column name="SUFFIX"/>
@@ -66,14 +67,14 @@
 
 		</property>
 
-		<set name="contactInfo" table="contact_info"  inverse="true" lazy="false" fetch="select" cascade="merge">
+		<set name="contactInfo" table="contact_info"  inverse="true" lazy="false" fetch="select" cascade="all">
 			<key>
 				<column name="PERSON_ID" not-null="true" />
 			</key>
 			<one-to-many class="com.pdomingo.model.person.ContactInfo" />
 		</set>
 
-		<set name="roles" table="PERSON_ROLES" lazy="true" fetch="select" cascade="all" >
+		<set name="roles" table="PERSON_ROLES" lazy="false" fetch="select" cascade="save-update, delete-orphan" >
             <key column="PERSON_ID" />
             <many-to-many column="ROLE_ID"  class="com.pdomingo.model.role.Role"/>
         </set>

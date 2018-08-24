@@ -52,7 +52,7 @@ public class Person{
 		return GWA;
 	}
 
-	public Date getDateHired(){
+	public Date getDateHired() {
 		return dateHired;
 	}
 
@@ -92,6 +92,7 @@ public class Person{
 		this.dateHired = newDateHired;
 	}
 
+
 	public void setCurrEmployed(Boolean newEmploymentStatus){
 		this.currEmployed = newEmploymentStatus;
 	}
@@ -102,5 +103,10 @@ public class Person{
 
 	public void setRoles(Set<Role> newRoles){
 		this.roles = newRoles;
+	}
+
+	@Override
+	public String toString(){
+		return(String.format("|%s\t|%s\t|%s\t|%f\t|%s\t|", name, address, bDay, GWA, dateHired));
 	}
 }

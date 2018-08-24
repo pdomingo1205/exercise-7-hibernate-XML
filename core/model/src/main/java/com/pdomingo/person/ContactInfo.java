@@ -53,7 +53,7 @@ public class ContactInfo implements java.io.Serializable{
 
 	@Override
 	public String toString(){
-		return String.format("%s %s: %s", person.getName(), contactType, contactInfo);
+		return String.format("ID:%d Person:%s| %s: %s", contactInfoId, person.getName(), contactType, contactInfo);
 	}
 
 }
