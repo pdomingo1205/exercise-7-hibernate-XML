@@ -1,4 +1,4 @@
-package com.pdomingo.service;
+package com.pdomingo.util;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -19,6 +19,7 @@ public class InputValidation{
 	}
 
 	public static final class Validate{
+
 		static Scanner scan = new Scanner(System.in);
 		final static String DOUBLE_PATTERN = "[0-9]+(\\.){0,1}[0-9]*";
 
@@ -55,7 +56,7 @@ public class InputValidation{
 			Boolean isYes = true;
 
 			do{
-				text = scan.nextLine();
+				text = scan.nextLine().toUpperCase();
 
 				if(text.equals("Y") == false && text.equals("N") == false){
 					System.out.println("Invalid Input");
@@ -99,7 +100,7 @@ public class InputValidation{
 				try{
 						isValid = true;
 						inValue = getInput();
-						date = new SimpleDateFormat("YYYY-MM-DD").parse(inValue);
+						date = new SimpleDateFormat("yyyy-MM-dd").parse(inValue);
 				}catch(ParseException e){
 					System.out.println("Invalid date");
 					isValid = false;

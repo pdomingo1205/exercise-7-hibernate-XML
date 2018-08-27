@@ -8,8 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
+import com.pdomingo.util.*;
 
-import static com.pdomingo.service.InputValidation.Validate.*;
+import static com.pdomingo.util.InputValidation.Validate.*;
 
 
 
@@ -24,9 +25,8 @@ public class ContactIO {
 
 		System.out.println("\n \t--- Choose Operation --- \n");
 		System.out.println("\n \t1. Update Contact");
-		System.out.println("\n \t2. Delete Contact");
-		System.out.println("\n \t3. List Contacts");
-		System.out.println("\n \t4. Exit");
+		System.out.println("\n \t2. List Contacts");
+		System.out.println("\n \t3. Exit");
 
 		return InputValidation.Validate.getIntegerInRange(1,4);
 	}
@@ -38,12 +38,9 @@ public class ContactIO {
 				updateContact();
 				break;
 			case 2:
-				deleteContact();
-				break;
-			case 3:
 				listContacts();
 				break;
-			case 4:
+			case 3:
 				break;
 		}
 
@@ -101,9 +98,17 @@ public class ContactIO {
         return contactInfo;
     }
 
+	public ContactInfo addContact(){
+		ContactInfo contact = new ContactInfo();
+        Integer intContactType = askContactType();
+
+        contact.setContactType(contactTypeToString(intContactType));
+        contact.setContactInfo(askContactInfo(intContactType));
+        return contact;
+	}
+
 
 	public ContactInfo editContact(ContactInfo contact){
-		contact = new ContactInfo();
         Integer intContactType = askContactType();
 
         contact.setContactType(contactTypeToString(intContactType));
@@ -118,7 +123,7 @@ public class ContactIO {
 		contact.setContactType(contactTypeToString(intContactType));
         contact.setContactInfo(askContactInfo(intContactType));
 
-		contactInfoService.persist(contact);
+		System.out.println(contactInfoService.persist(contact));
 	}
 
 	public void readContact(){
@@ -153,7 +158,7 @@ public class ContactIO {
 			}catch(Exception e){
 
 			}
-			contactInfoService.update(contact);
+			System.out.println(contactInfoService.update(contact));
 
 		}
 		else{
@@ -168,7 +173,7 @@ public class ContactIO {
 
 		if(contactInfoService.checkIfExists(inputId)){
 
-			contactInfoService.delete(inputId);
+			System.out.println(contactInfoService.delete(inputId));
 
 		}
 		else{
@@ -187,7 +192,7 @@ public class ContactIO {
 		do{
 			choice = chooseOperation();
 			doChooseOperation(choice);
-		}while(choice != 4);
+		}while(choice != 3);
 	}
 
 }

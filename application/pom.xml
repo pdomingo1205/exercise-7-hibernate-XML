@@ -84,6 +84,12 @@
     </dependency>
 
     <dependency>
+        <groupId>com.pdomingo</groupId>
+        <artifactId>util</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
         <groupId>commons-validator</groupId>
         <artifactId>commons-validator</artifactId>
     </dependency>

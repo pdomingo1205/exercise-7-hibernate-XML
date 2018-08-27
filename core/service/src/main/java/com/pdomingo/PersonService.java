@@ -1,10 +1,12 @@
 package com.pdomingo.service;
 
-import java.util.List;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import com.pdomingo.model.person.*;
 import com.pdomingo.model.role.Role;
 import com.pdomingo.dao.PersonDao;
+import org.hibernate.NonUniqueObjectException;
 
 public class PersonService {
 
@@ -14,32 +16,73 @@ public class PersonService {
 		personDao = new PersonDao();
 	}
 
-	public void persist(Person entity) {
-		System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
-		personDao.openCurrentSessionwithTransaction();
-		personDao.persist(entity);
-		personDao.closeCurrentSessionwithTransaction();
+	public PersonService(PersonDao newDao) {
+		personDao = newDao;
 	}
 
-	public void update(Person entity) {
-		personDao.openCurrentSessionwithTransaction();
-		//System.out.println(entity.getRoles());
-		personDao.update(entity);
-		personDao.closeCurrentSessionwithTransaction();
+	public String persist(Person entity) {
+		String updateStatus;
+
+		try{
+			System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
+			personDao.openCurrentSessionwithTransaction();
+			personDao.persist(entity);
+			personDao.closeCurrentSessionwithTransaction();
+			updateStatus = "\n\t !!! Insert Successful !!!";
+		}catch(Exception e){
+			updateStatus = "\n\t !-- Insert Failed --!";
+		}
+
+		return updateStatus;
+
 	}
 
-	public void updateRole(Person entity) {
-		personDao.openCurrentSessionwithTransaction();
-		//System.out.println(entity.getRoles());
-		personDao.updateRole(entity);
-		personDao.closeCurrentSessionwithTransaction();
+	public String update(Person entity) {
+		String updateStatus;
+		try{
+			personDao.openCurrentSessionwithTransaction();
+			//System.out.println(entity.getRoles());
+			personDao.update(entity);
+			personDao.closeCurrentSessionwithTransaction();
+			updateStatus = "\n\t !!! Update Successful !!!";
+		}
+		catch(Exception e){
+			updateStatus = "\n\t !-- Update Failed --!";
+		}
+
+		return updateStatus;
+	}
+
+	public Set<Role> removeRole(Set<Role> roles, String roleName){
+		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
+		    Role role  =  iterator.next();
+		    if (role.getRole().equals(roleName)) {
+		        iterator.remove();
+		    }
+		}
+		return roles;
+	}
+
+
+	public Set<ContactInfo> removeContact(Set<ContactInfo> contacts, Long id){
+		for (Iterator<ContactInfo> iterator = contacts.iterator(); iterator.hasNext();) {
+			ContactInfo contact  =  iterator.next();
+			if (contact.getContactInfoId().equals(id)) {
+				iterator.remove();
+			}
+		}
+		return contacts;
+	}
+
+	public Boolean containsRole(Set<Role> list, String name){
+    	return list.stream().filter(o -> o.getRole().equals(name)).findFirst().isPresent();
 	}
 
 	public Person findById(Long id) {
 		personDao.openCurrentSession();
 		Person person = personDao.findById(id);
 		//System.out.println("pservice findbyid\n\n\n" + person.getName() + "\n\n\n");
-		personDao.getCurrentSession().evict(person);
+		//personDao.getCurrentSession().evict(person);
 		personDao.closeCurrentSession();
 		return person;
 	}
@@ -58,16 +101,21 @@ public class PersonService {
 		return exists;
 	}
 
-	public void delete(Long id) {
+	public String delete(Long id) {
+
+		String textToReturn;
 		try{
 			personDao.openCurrentSessionwithTransaction();
 			Person person = personDao.findById(id);
 			personDao.delete(person);
 			personDao.closeCurrentSessionwithTransaction();
+			textToReturn = "\n\t!!! Deleted !!!\n";
 
-		}finally{
-
+		}catch(Exception e){
+			textToReturn = "\n\t!-- Delete Failed --!\n";
 		}
+
+		return textToReturn;
 	}
 
 	public List<Person> findAll() {
@@ -85,10 +133,20 @@ public class PersonService {
 		return persons;
 	}
 
-	public void deleteAll() {
-		personDao.openCurrentSessionwithTransaction();
-		personDao.deleteAll();
-		personDao.closeCurrentSessionwithTransaction();
+	public String deleteAll() {
+
+		String textToReturn;
+		try{
+			personDao.openCurrentSessionwithTransaction();
+			personDao.deleteAll();
+			personDao.closeCurrentSessionwithTransaction();
+			textToReturn = "\n\t!!! Deleted !!!\n";
+
+		}catch(Exception e){
+			textToReturn = "\n\t!-- Delete Failed --!\n";
+		}
+
+		return textToReturn;
 	}
 
 	public List<Role> findRoles(Long id){
@@ -100,9 +158,16 @@ public class PersonService {
 
 	public List<String> findContacts(Long id){
 		personDao.openCurrentSessionwithTransaction();
-		List<String> roles = personDao.findPersonContacts(id);
+		List<ContactInfo> contacts = personDao.findPersonContacts(id);
+		
+		List<String> contactString = new ArrayList<String>();
+
+		for (ContactInfo contact : contacts) {
+			contactString.add(contact.toString());
+		}
 		personDao.closeCurrentSessionwithTransaction();
-		return roles;
+
+		return contactString;
 	}
 
 	public PersonDao personDao() {
