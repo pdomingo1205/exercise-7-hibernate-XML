@@ -61,11 +61,11 @@ public class Person{
 	}
 
 	public Set<ContactInfo> getContactInfo(){
-		return contactInfo;
+		return this.contactInfo;
 	}
 
 	public Set<Role> getRoles(){
-		return roles;
+		return this.roles;
 	}
 
 	public void setPersonId(Long newID){

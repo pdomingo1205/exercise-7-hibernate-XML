@@ -58,8 +58,6 @@ public class RoleDao implements DaoInterface<Role, Long> {
 	}
 
 	public Session getCurrentSession() {
-		System.out.println("Searching..");
-		//clearScreen();
 		return currentSession;
 	}
 
@@ -79,7 +77,7 @@ public class RoleDao implements DaoInterface<Role, Long> {
 		getCurrentSession().saveOrUpdate(entity);
 	}
 
-	public void persist(Set<Role> entity) {
+	public void persistSet(Set<Role> entity) {
 		getCurrentSession().saveOrUpdate(entity);
 	}
 
@@ -116,7 +114,6 @@ public class RoleDao implements DaoInterface<Role, Long> {
 
 	@SuppressWarnings("unchecked")
 	public List<Role> findAll() {
-		System.out.println("Searching..");
 		List<Role> roles = (List<Role>) getCurrentSession().createQuery("from Role").list();
 		clearScreen();
 		return roles;

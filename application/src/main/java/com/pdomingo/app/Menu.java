@@ -6,6 +6,9 @@ import java.util.*;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
+import com.pdomingo.util.*;
+
+import static com.pdomingo.util.InputValidation.Validate.*;
 
 public class Menu {
 	Scanner scan = new Scanner(System.in);

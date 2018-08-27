@@ -8,8 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
+import com.pdomingo.util.*;
 
-import static com.pdomingo.service.InputValidation.Validate.*;
+import static com.pdomingo.util.InputValidation.Validate.*;
 
 
 
@@ -74,7 +75,7 @@ public class RoleIO {
 
 		role = roleService.checkIfUnique(roleName);
 
-        roleService.persist(role);
+        System.out.println(roleService.persist(role));
 	}
 
 	private String askRole(){
@@ -114,8 +115,9 @@ public class RoleIO {
 
 			System.out.println("\n\t--- Input new Role ---\n");
 			String newRole = InputValidation.Validate.getRequiredInput();
-			role.setRole(newRole);
-			roleService.update(role);
+			
+				role = roleService.checkIfUnique(newRole);
+			System.out.println(roleService.update(role));
 
 		}
 		else{
@@ -132,7 +134,7 @@ public class RoleIO {
 		Role role;
 
 		if(roleService.checkIfExists(inputId)){
-			roleService.delete(inputId);
+			System.out.println(roleService.delete(inputId));
 
 		}
 		else{

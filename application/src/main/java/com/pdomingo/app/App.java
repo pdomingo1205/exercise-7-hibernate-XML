@@ -14,7 +14,7 @@ public class App {
 //final static Logger logger = Logger.getLogger(App.class);
 
 	public static void main(String[] args) {
-		
+
 		Menu menu = new Menu();
 		menu.start();
 

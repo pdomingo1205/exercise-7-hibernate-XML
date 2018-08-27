@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.pdomingo.model.role.Role;
 import com.pdomingo.dao.RoleDao;
+import org.hibernate.exception.ConstraintViolationException;
 
 public class RoleService {
 
@@ -13,25 +14,63 @@ public class RoleService {
 	public RoleService() {
 		roleDao = new RoleDao();
 	}
-
-	public void persist(Role entity) {
-		roleDao.openCurrentSessionwithTransaction();
-		roleDao.persist(entity);
-		System.out.println("\n\t!!! Role added! !!!\n");
-		roleDao.closeCurrentSessionwithTransaction();
+	public RoleService(RoleDao newDao) {
+		roleDao = newDao;
 	}
 
-	public void persistSet(Set<Role> entity) {
-		roleDao.openCurrentSessionwithTransaction();
-		roleDao.persist(entity);
-		roleDao.closeCurrentSessionwithTransaction();
+	public String persist(Role entity) {
+		String textToReturn ="";
+
+		try{
+			roleDao.openCurrentSessionwithTransaction();
+			roleDao.persist(entity);
+			textToReturn =("\n\t!!! Role added! !!!\n");
+			roleDao.closeCurrentSessionwithTransaction();
+
+		}catch(Exception e){
+			textToReturn = "\n\t!-- Failed to add role --!\n";
+		}
+
+		return textToReturn;
 	}
 
-	public void update(Role entity) {
-		roleDao.openCurrentSessionwithTransaction();
-		roleDao.update(entity);
-		System.out.println("\n\t!!! Role updated! !!!\n");
-		roleDao.closeCurrentSessionwithTransaction();
+	public String persistSet(Set<Role> entity) {
+		String textToReturn ="";
+
+		try{
+			roleDao.openCurrentSessionwithTransaction();
+			roleDao.persistSet(entity);
+			roleDao.closeCurrentSessionwithTransaction();
+			textToReturn =("\n\t!!! Role added! !!!\n");
+
+		}catch(Exception e){
+			textToReturn = "\n\t!-- Failed to add role --!\n";
+		}
+
+		return textToReturn;
+
+	}
+
+	public String update(Role entity) {
+		String textToReturn;
+
+		try{
+
+			if(checkIfExists(entity.getRoleId())){
+				roleDao.openCurrentSessionwithTransaction();
+				roleDao.update(entity);
+				textToReturn = ("\n\t!!! Role updated! !!!\n");
+				roleDao.closeCurrentSessionwithTransaction();
+			}
+			else{
+				textToReturn = "\n\t!-- Role does not exist --!\n";
+			}
+
+		}catch(Exception e){
+			textToReturn = "\n\t!-- Failed to update Role --!\n";
+		}
+
+		return textToReturn;
 	}
 
 	public Boolean checkIfExists(Long Id){
@@ -74,20 +113,25 @@ public class RoleService {
 		return role;
 	}
 
-	public void delete(Long id) {
+	public String delete(Long id) {
+		String textToReturn;
 
-
-		if(checkIfExists(id)){
-			roleDao.openCurrentSessionwithTransaction();
-			Role role = roleDao.findById(id);
-			roleDao.delete(role);
-			System.out.println("\n\t!!! Role deleted !!!\n");
+		try{
+			if(checkIfExists(id)){
+				roleDao.openCurrentSessionwithTransaction();
+				Role role = roleDao.findById(id);
+				roleDao.delete(role);
+				textToReturn = "\n\t!!! Role deleted !!!\n";
+				roleDao.closeCurrentSessionwithTransaction();
+			}
+			else{
+				textToReturn = "\n\t!-- Role does not exist --!\n";
+			}
+		}catch(ConstraintViolationException pse){
+			textToReturn = "\n\t!-- Another Person is still assigned to this Role --!\n";
 		}
-		else{
-			System.out.println("\n\t!-- Role does not exist --!\n");
-		}
 
-		roleDao.closeCurrentSessionwithTransaction();
+		return textToReturn;
 	}
 
 	public List<Role> findAll() {
@@ -97,10 +141,20 @@ public class RoleService {
 		return roles;
 	}
 
-	public void deleteAll() {
-		roleDao.openCurrentSessionwithTransaction();
-		roleDao.deleteAll();
-		roleDao.closeCurrentSessionwithTransaction();
+	public String deleteAll() {
+
+		String textToReturn;
+
+		try{
+				roleDao.openCurrentSessionwithTransaction();
+				roleDao.deleteAll();
+				roleDao.closeCurrentSessionwithTransaction();
+				textToReturn = "\n\t!!! Role deleted !!!\n";
+		}catch(ConstraintViolationException pse){
+			textToReturn = "\n\t!-- Another Person is still assigned to this Role --!\n";
+		}
+
+		return textToReturn;
 	}
 
 	public RoleDao roleDao() {

@@ -114,9 +114,9 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> findPersonContacts(Long id) {
+	public List<ContactInfo> findPersonContacts(Long id) {
 		//List<Role> roles = (List<Role>) getCurrentSession().createQuery("select role from person_roles inner join role on role.role_id = person_roles.role_id where person_roles.person_id=1").list();
-		List<String> roles = (List<String>) getCurrentSession().createQuery("select contactInfo from ContactInfo where person.personId = "+id).list();
+		List<ContactInfo> roles = (List<ContactInfo>) getCurrentSession().createQuery("from ContactInfo where person.personId = "+id).list();
 
 		return roles;
 	}

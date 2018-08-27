@@ -11,7 +11,7 @@
 		</id>
 
 		<many-to-one name="person" class="com.pdomingo.model.person.Person" lazy="false">
-			<column name="PERSON_ID" not-null="true" />
+			<column name="PERSON_ID" not-null="false" />
 		</many-to-one>
 
 		<property name="contactInfo" type="string">

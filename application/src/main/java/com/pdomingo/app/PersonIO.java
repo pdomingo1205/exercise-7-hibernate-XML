@@ -9,15 +9,17 @@ import com.pdomingo.model.role.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.service.*;
 
-import static com.pdomingo.service.InputValidation.Validate.*;
-
+import static com.pdomingo.util.InputValidation.Validate.*;
+import com.pdomingo.util.*;
 
 
 public class PersonIO {
+
 	Scanner scan = new Scanner(System.in);
 	RoleIO roleIO = new RoleIO();
 	ContactIO contactIO = new ContactIO();
 	PersonService personService = new PersonService();
+	ContactInfoService contactInfoService = new ContactInfoService();
 
 	public PersonIO(){
 
@@ -114,6 +116,7 @@ public class PersonIO {
 	}
 
 	public void createPerson(){
+
 		Name name = askName();
 		Address address = askAddress();
 		Date birthDay = askDate("Birth Day");
@@ -136,7 +139,7 @@ public class PersonIO {
 		person.setContactInfo(contacts);
 		person.setRoles(roles);
 
-		personService.persist(person);
+		System.out.println(personService.persist(person));
 		//Person person = new Person();
 
 
@@ -145,7 +148,7 @@ public class PersonIO {
 	public String listRole(Long id){
 		String toReturn = "";
 		for(Role role : personService.findRoles(id)) {
-		   toReturn = "\n" + toReturn +" "+ role;
+		   toReturn = "\n\t" + toReturn +" "+ role;
 		}
 		return toReturn;
 	}
@@ -153,7 +156,7 @@ public class PersonIO {
 	public String listContacts(Long id){
 		String toReturn = "";
 		for(String contactInfo : personService.findContacts(id)) {
-		   toReturn = "\n" + toReturn + " " + contactInfo;
+		   toReturn = "\n\t" + toReturn + " " + contactInfo;
 		}
 		return toReturn;
 	}
@@ -238,7 +241,7 @@ public class PersonIO {
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Person person;
 
-		if(personService.checkIfExists(inputId)){
+		if (personService.checkIfExists(inputId)) {
 			person = personService.findById(inputId);
 			Integer choice;
 
@@ -247,10 +250,10 @@ public class PersonIO {
 				person = doUpdateChoice(choice,person);
 			}while(choice.intValue() != 7);
 
-			personService.update(person);
+			System.out.println(personService.update(person));
 
 		}
-		else{
+		else {
 			System.out.println("\n\t!-- Person does not exist --!\n");
 		}
 	}
@@ -260,12 +263,12 @@ public class PersonIO {
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Role role;
 
-		if(personService.checkIfExists(inputId)){
+		if (personService.checkIfExists(inputId)) {
 
-			personService.delete(inputId);
+			System.out.println(personService.delete(inputId));
 
 		}
-		else{
+		else {
 			System.out.println("\n\t Person does not exist \n");
 		}
 	}
@@ -349,6 +352,7 @@ public class PersonIO {
 		System.out.println("\n\t---Choose what to manage---\n");
 		System.out.println("\n\t1.Role\n");
 		System.out.println("\n\t2.Contact Info\n");
+
 		return InputValidation.Validate.getIntegerInRange(1,2);
 	}
 
@@ -358,27 +362,111 @@ public class PersonIO {
 		System.out.println("\n\t1.Add Role\n");
 		System.out.println("\n\t2.Delete Role\n");
 		System.out.println("\n\t3.Update Role\n");
+		System.out.println("\n\t4.List Role\n");
 
-		switch(InputValidation.Validate.getInteger()){
+		Set<Role> roles;
+		String roleToUpdate;
+
+		System.out.println(listRole(person.getPersonId()));
+
+		switch(InputValidation.Validate.getIntegerInRange(1,4)){
+
 			case 1:
-				person.getRoles().add(roleIO.addRole());
+				roles = person.getRoles();
+				System.out.println(roles);
+				roles.add(roleIO.addRole());
+				person.setRoles(roles);
+				//person.getRoles().add(roleIO.addRole());
 				break;
+
 			case 2:
+				roles = person.getRoles();
 				System.out.println("--- Input name of Role to Delete ---");
-				person.getRoles().remove(InputValidation.Validate.getRequiredInput());
+				roleToUpdate = InputValidation.Validate.getRequiredInput();
+
+				if(personService.containsRole(roles, roleToUpdate)){
+					roles = personService.removeRole(roles, roleToUpdate);
+				}else{
+					System.out.println("Role does not exist");
+				}
+
 				break;
+
 			case 3:
+				roles = person.getRoles();
 				System.out.println("--- Input name of Role to Update ---");
-				person.getRoles().remove(InputValidation.Validate.getRequiredInput());
-				person.getRoles().add(roleIO.addRole());
-				System.out.println(person.getRoles());
+				roleToUpdate = InputValidation.Validate.getRequiredInput();
+
+				if(personService.containsRole(roles, roleToUpdate)){
+					roles = personService.removeRole(roles, roleToUpdate);
+					roles.add(roleIO.addRole());
+				}else{
+					System.out.println("Role does not exist");
+				}
+
 				break;
+
 			case 4:
-				listRole(person.getPersonId());
+				System.out.println(listRole(person.getPersonId()));
 			break;
 
 		}
-		personService.updateRole(person);
+
+		System.out.println(personService.update(person));
+
+	}
+
+	private void manageContacts(Person person){
+
+		System.out.println("\n\t--- Choose Operation ---\n");
+		System.out.println("\n\t1.Add Contact Info\n");
+		System.out.println("\n\t2.Delete Contact Info\n");
+		System.out.println("\n\t3.Update Contact Info\n");
+		System.out.println("\n\t4.List Contacts\n");
+		Set<ContactInfo> contacts;
+		ContactInfo contact;
+		Long id;
+
+		System.out.println(listContacts(person.getPersonId()));
+
+		Integer choice = InputValidation.Validate.getIntegerInRange(1,4);
+
+		switch(choice){
+
+			case 1:
+				contacts = person.getContactInfo();
+				contact = contactIO.addContact();
+
+				contact.setPerson(person);
+				contacts.add(contact);
+				person.setContactInfo(contacts);
+				break;
+
+			case 2:
+				contacts = person.getContactInfo();
+
+				System.out.println("--- Input Id of Contact Info to Delete ---");
+				id = Long.valueOf(InputValidation.Validate.getInteger());
+
+				contacts =  personService.removeContact(contacts, Long.valueOf(id));
+				person.setContactInfo(contacts);
+
+				System.out.println(person.getContactInfo());
+				System.out.println(contactInfoService.delete(id));
+				break;
+
+			case 3:
+				contactIO.updateContact();
+				break;
+
+			case 4:
+				System.out.println(listContacts(person.getPersonId()));
+			break;
+		}
+
+		if(choice.equals(4) == false && choice.equals(3) == false){
+			System.out.println(personService.update(person));
+		}
 
 	}
 
@@ -393,7 +481,7 @@ public class PersonIO {
 				manageRole(person);
 
 			}else{
-				
+				manageContacts(person);
 			}
 		}
 		else{
