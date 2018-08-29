@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 import static org.junit.Assert.*;
 
-import com.pdomingo.dao.RoleDao;
+import com.pdomingo.dao.DaoParent;
 import com.pdomingo.service.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.model.role.Role;
@@ -17,48 +17,27 @@ import static org.mockito.Mockito.*;
 public class RoleServiceTest
     {
 
+
         protected static RoleService roleService = new RoleService();
         Role role;
-        RoleDao mockDao;
+        DaoParent mockDao;
 
         @Test(expected = Exception.class)
         public void test_PersistShould_NotInsert(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).persist(any(Role.class));
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if insertion fails", "\n\t!-- Failed to add role --!\n", roleService.persist(role));
         }
 
-        @Test(expected = Exception.class)
-        public void test_PersistSetShould_NotInsert(){
-            role = new Role();
-            Set<Role> roles = new HashSet<Role>();
-            roles.add(role);
-            mockDao = mock(RoleDao.class);
-            doThrow(new Exception()).when(mockDao).persistSet(any(Set.class));
-            roleService = new RoleService(mockDao);
 
-            assertEquals("Checking if insertion fails", "\n\t!-- Failed to add role --!\n", roleService.persistSet(roles));
-        }
-
-        @Test
-        public void test_PersistSetShould_Insert(){
-            role = new Role();
-            Set<Role> roles = new HashSet<Role>();
-            roles.add(role);
-            mockDao = mock(RoleDao.class);
-            doNothing().when(mockDao).persistSet(any(Set.class));
-            roleService = new RoleService(mockDao);
-
-            assertEquals("Checking if insertion succeeds",  "\n\t!!! Role added! !!!\n", roleService.persistSet(roles));
-        }
 
         @Test
         public void test_PersistShould_Insert(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).persist(any(Role.class));
             roleService = new RoleService(mockDao);
 
@@ -69,9 +48,9 @@ public class RoleServiceTest
         @Test(expected = Exception.class)
         public void test_DeleteShould_NotDelete(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).delete(any());
-            when(mockDao.findById(any())).thenReturn(role);
+            when(mockDao.findById(any(), any())).thenReturn(role);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if deletion fails", "\n\t!-- Delete Failed --!\n", roleService.delete(Long.valueOf(1)));
@@ -80,9 +59,9 @@ public class RoleServiceTest
         @Test
         public void test_DeleteShould_Delete(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).delete(any());
-            when(mockDao.findById(any())).thenReturn(role);
+            when(mockDao.findById(any(), any())).thenReturn(role);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if deletion succeeds", "\n\t!!! Role deleted !!!\n", roleService.delete(Long.valueOf(1)));
@@ -91,8 +70,8 @@ public class RoleServiceTest
         @Test(expected = Exception.class)
         public void test_DeleteAllShould_NotDelete(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
-            doThrow(new Exception()).when(mockDao).deleteAll();
+            mockDao = mock(DaoParent.class);
+            doThrow(new Exception()).when(mockDao).deleteAll(any());
 
             roleService = new RoleService(mockDao);
 
@@ -102,8 +81,8 @@ public class RoleServiceTest
         @Test
         public void test_DeleteAllShould_Delete(){
             role = new Role();
-            mockDao = mock(RoleDao.class);
-            doNothing().when(mockDao).deleteAll();
+            mockDao = mock(DaoParent.class);
+            doNothing().when(mockDao).deleteAll(any());
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if deletion succeeds", "\n\t!!! Role deleted !!!\n",roleService.deleteAll());
@@ -115,10 +94,10 @@ public class RoleServiceTest
             Role r = new Role();
             r.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             //doNothing().when(mockDao).getCurrentSession();
             //doReturn(role).when(mockDao).persist(any());
-            when(mockDao.findById(any())).thenReturn(r);
+            when(mockDao.findById(any(), any())).thenReturn(r);
             roleService = new RoleService(mockDao);
             //System.out.println("AAA"+roleService.findById(Long.valueOf(1)));
 
@@ -128,10 +107,10 @@ public class RoleServiceTest
 
         @Test
         public void test_checkExists_False(){
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             //doNothing().when(mockDao).getCurrentSession();
             //doReturn(role).when(mockDao).persist(any());
-            when(mockDao.findById(any())).thenReturn(null);
+            when(mockDao.findById(any(), any())).thenReturn(null);
             roleService = new RoleService(mockDao);
             //System.out.println("AAA"+roleService.findById(Long.valueOf(1)));
 
@@ -143,8 +122,8 @@ public class RoleServiceTest
             Role r = new Role();
             r.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
-            when(mockDao.findById(any())).thenReturn(r);
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findById(any(), any())).thenReturn(r);
             roleService = new RoleService(mockDao);
 
             assertTrue("Checking if exists should be true", roleService.checkIfExists(Long.valueOf(1)));
@@ -156,9 +135,9 @@ public class RoleServiceTest
             role.setRole("Boy");
             role.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).update(any());
-            when(mockDao.findById(any())).thenReturn(role);
+            when(mockDao.findById(any(), any())).thenReturn(role);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if update succesful", "\n\t!!! Role updated! !!!\n", roleService.update(role));
@@ -171,9 +150,9 @@ public class RoleServiceTest
             role.setRole("Boy");
             role.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).update(any());
-            when(mockDao.findById(any())).thenReturn(null);
+            when(mockDao.findById(any(), any())).thenReturn(null);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if update succesful", "\n\t!-- Role does not exist --!\n", roleService.update(role));
@@ -186,9 +165,9 @@ public class RoleServiceTest
             role.setRole("Boy");
             role.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).update(any());
-            when(mockDao.findById(any())).thenReturn(null);
+            when(mockDao.findById(any(), any())).thenReturn(null);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if update succesful", "\n\t!-- Role does not exist --!\n", roleService.delete(Long.valueOf(1)));
@@ -202,9 +181,9 @@ public class RoleServiceTest
             role.setRoleId(Long.valueOf(1));
 
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).update(any());
-            when(mockDao.findById(any())).thenReturn(role);
+            when(mockDao.findById(any(), any())).thenReturn(role);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if update fails", "\n\t!-- Update Failed --!\n", roleService.update(role));
@@ -222,8 +201,8 @@ public class RoleServiceTest
             roles.add(c2);
             roles.add(c3);
 
-            mockDao = mock(RoleDao.class);
-            when(mockDao.findAll()).thenReturn(roles);
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findAll(any())).thenReturn(roles);
             roleService = new RoleService(mockDao);
 
             assertEquals("Checking if set size is 3", 3, roleService.findAll().size());
@@ -237,7 +216,7 @@ public class RoleServiceTest
             role.setRole("Mechanic");
             role.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             when(mockDao.findByRoleName(any())).thenReturn(role);
             roleService = new RoleService(mockDao);
 
@@ -252,7 +231,7 @@ public class RoleServiceTest
             role.setRole("Mechanic");
             role.setRoleId(Long.valueOf(1));
 
-            mockDao = mock(RoleDao.class);
+            mockDao = mock(DaoParent.class);
             when(mockDao.findByRoleName(any())).thenReturn(null);
             roleService = new RoleService(mockDao);
 
@@ -260,6 +239,21 @@ public class RoleServiceTest
             //assertTrue("Checking if set is same", roles.contains(role3));
         }
 
+        private Object actuallyT;
+
+        public <T> List<T> magicalListGetter(Class<T> klazz) {
+            List<T> list = new ArrayList<>();
+            list.add(klazz.cast(actuallyT));
+
+            try {
+                list.add(klazz.getConstructor().newInstance()); // If default constructor
+                list.add(klazz.getConstructor().newInstance());
+            } catch(Exception e){
+
+            }
+
+            return list;
+        }
 
 
     }

@@ -329,12 +329,12 @@ public class PersonIO {
 
 		if(order.equals(1)){
 			for (Person p : persons) {
-				System.out.println(p);
+				System.out.println(String.format("ID:%s %s", p.getPersonId(), p));
 			}
 		}else{
 			Collections.reverse(persons);
 			for (Person p : persons) {
-				System.out.println(p);
+				System.out.println(String.format("ID:%s %s", p.getPersonId(), p));
 			}
 		}
 
@@ -343,7 +343,7 @@ public class PersonIO {
 	public void listPersonsBy(String property, Integer order){
 
 		for (Person p : personService.findOrderBy(property, order)) {
-			System.out.println(p);
+			System.out.println(String.format("ID:%s %s", p.getPersonId(), p));
 		}
 
 	}

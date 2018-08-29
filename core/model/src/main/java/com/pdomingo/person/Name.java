@@ -1,6 +1,7 @@
 package com.pdomingo.model.person;
 
 import java.util.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class Name{
 
@@ -68,7 +69,8 @@ public class Name{
 
 	@Override
 	public String toString(){
-		return String.format("%s %s %s %s %s", this.title, this.firstName, this.middleName, this.lastName, this.suffix);
+		return String.format("%s %s %s %s %s", StringUtils.defaultIfBlank(this.title, "\t"),
+							 StringUtils.defaultIfBlank(this.firstName, "\t"), StringUtils.defaultIfBlank(this.middleName, "\t"), StringUtils.defaultIfBlank(this.lastName, "\t"), StringUtils.defaultIfBlank(this.suffix, "\t"));
 	}
 
 

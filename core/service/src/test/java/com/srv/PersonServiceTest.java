@@ -3,28 +3,35 @@ package com.pdomingo.service;
 import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import static org.junit.Assert.*;
 
-import com.pdomingo.dao.PersonDao;
+import com.pdomingo.dao.DaoParent;
 import com.pdomingo.service.*;
 import com.pdomingo.model.person.*;
 import com.pdomingo.model.role.Role;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.*;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 public class PersonServiceTest
     {
 
-        protected static PersonService personService = new PersonService();
+        protected PersonService personService = new PersonService();
         Person person;
-        PersonDao mockDao;
+        DaoParent mockDao;
+
+        @Before
+        public void renew(){
+            mockDao = mock(DaoParent.class);
+        }
 
         @Test(expected = Exception.class)
         public void test_PersistShould_NotInsert(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).persist(any());
             personService = new PersonService(mockDao);
 
@@ -34,9 +41,9 @@ public class PersonServiceTest
         @Test(expected = Exception.class)
         public void test_DeleteShould_NotDelete(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).delete(any());
-            when(mockDao.findById(any())).thenReturn(person);
+            when(mockDao.findById(any(), any())).thenReturn(person);
             personService = new PersonService(mockDao);
 
             assertEquals("Checking if deletion fails", "\n\t!-- Delete Failed --!\n", personService.delete(Long.valueOf(1)));
@@ -44,10 +51,10 @@ public class PersonServiceTest
 
         @Test
         public void test_DeleteShould_Delete(){
-            person = new Person();
-            mockDao = mock(PersonDao.class);
+            Person p = new Person();
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).delete(any());
-            when(mockDao.findById(any())).thenReturn(person);
+            when(mockDao.findById(any(), (Class) any() )).thenReturn(p);
             personService = new PersonService(mockDao);
 
             assertEquals("Checking if deletion succeeds", "\n\t!!! Deleted !!!\n", personService.delete(Long.valueOf(1)));
@@ -56,8 +63,8 @@ public class PersonServiceTest
         @Test(expected = Exception.class)
         public void test_DeleteAllShould_NotDelete(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
-            doThrow(new Exception()).when(mockDao).deleteAll();
+            mockDao = mock(DaoParent.class);
+            doThrow(new Exception()).when(mockDao).deleteAll(any());
 
             personService = new PersonService(mockDao);
 
@@ -66,18 +73,23 @@ public class PersonServiceTest
 
         @Test
         public void test_DeleteAllShould_Delete(){
-            person = new Person();
-            mockDao = mock(PersonDao.class);
-            doNothing().when(mockDao).deleteAll();
-            personService = new PersonService(mockDao);
 
-            assertEquals("Checking if deletion succeeds", "\n\t!!! Deleted !!!\n",personService.deleteAll());
+                person = new Person();
+                mockDao = mock(DaoParent.class);
+                doNothing().when(mockDao).deleteAll(any());
+
+                when(mockDao.findAll(any())).thenReturn(magicalListGetter(Object.class));
+
+                personService = new PersonService(mockDao);
+
+                assertEquals("Checking if deletion succeeds", "\n\t!!! Deleted !!!\n",personService.deleteAll());
+
         }
 
         @Test
         public void test_PersistShould_Insert(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).persist(any());
             personService = new PersonService(mockDao);
 
@@ -93,25 +105,22 @@ public class PersonServiceTest
             name.setFirstName("John");
             name.setLastName("Connor");
             p.setName(name);
-            mockDao = mock(PersonDao.class);
-            //doNothing().when(mockDao).getCurrentSession();
-            //doReturn(person).when(mockDao).persist(any());
-            when(mockDao.findById(any())).thenReturn(p);
+
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findById(any(), (Class) any() )).thenReturn(Person.class.cast(p));
             personService = new PersonService(mockDao);
-            //System.out.println("AAA"+personService.findById(Long.valueOf(1)));
 
             assertEquals("Checking if found",  p, personService.findById(Long.valueOf(1)));
+
 
         }
 
         @Test
         public void test_checkExists_False(){
-            mockDao = mock(PersonDao.class);
-            //doNothing().when(mockDao).getCurrentSession();
-            //doReturn(person).when(mockDao).persist(any());
-            when(mockDao.findById(any())).thenReturn(null);
+            mockDao = mock(DaoParent.class);
+            Person person = new Person();
+            when(mockDao.findById(any(), (Class) any() )).thenReturn(null);
             personService = new PersonService(mockDao);
-            //System.out.println("AAA"+personService.findById(Long.valueOf(1)));
 
             assertFalse("Checking if found", personService.checkIfExists(Long.valueOf(1)));
         }
@@ -124,13 +133,10 @@ public class PersonServiceTest
             name.setFirstName("John");
             name.setLastName("Connor");
             p.setName(name);
-            System.out.println(p);
-            mockDao = mock(PersonDao.class);
-            //doNothing().when(mockDao).getCurrentSession();
-            //doReturn(person).when(mockDao).persist(any());
-            when(mockDao.findById(any())).thenReturn(p);
+
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findById(any(), (Class) any() )).thenReturn(Person.class.cast(p));
             personService = new PersonService(mockDao);
-            //System.out.println("AAA"+personService.findById(Long.valueOf(1)));
 
             assertTrue("Checking if exists should be true", personService.checkIfExists(Long.valueOf(1)));
         }
@@ -138,7 +144,7 @@ public class PersonServiceTest
         @Test
         public void test_UpdateShould_Update(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             doNothing().when(mockDao).update(any());
             personService = new PersonService(mockDao);
 
@@ -149,7 +155,7 @@ public class PersonServiceTest
         @Test(expected = Exception.class)
         public void test_Update_Fail(){
             person = new Person();
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             doThrow(new Exception()).when(mockDao).update(any());
             personService = new PersonService(mockDao);
 
@@ -202,19 +208,27 @@ public class PersonServiceTest
             assertTrue("Checking if set still contain Manager", roles.contains(role3));
         }
 
+        private Object actuallyT;
+
+        public <T> List<T> magicalListGetter(Class<T> klazz) {
+            List<T> list = new ArrayList<>();
+            list.add(klazz.cast(actuallyT));
+
+            try {
+                list.add(klazz.getConstructor().newInstance()); // If default constructor
+                list.add(klazz.getConstructor().newInstance());
+            } catch(Exception e){
+
+            }
+
+            return list;
+        }
+
         @Test
         public void test_FindAll(){
-            List<Person> persons = new ArrayList<Person>();
 
-            Person p1 = new Person();
-            Person p2 = new Person();
-            Person p3 = new Person();
-            persons.add(p1);
-            persons.add(p2);
-            persons.add(p3);
-
-            mockDao = mock(PersonDao.class);
-            when(mockDao.findAll()).thenReturn(persons);
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findAll(any())).thenReturn(magicalListGetter(Object.class));
             personService = new PersonService(mockDao);
 
             assertEquals("Checking if set size is 3", 3, personService.findAll().size());
@@ -232,7 +246,7 @@ public class PersonServiceTest
             persons.add(p2);
             persons.add(p3);
 
-            mockDao = mock(PersonDao.class);
+            mockDao = mock(DaoParent.class);
             when(mockDao.findAllOrderBy(any(),any())).thenReturn(persons);
             personService = new PersonService(mockDao);
 
@@ -248,8 +262,8 @@ public class PersonServiceTest
             Role role = new Role();
             roles.add(role);
 
-            mockDao = mock(PersonDao.class);
-            when(mockDao.findPersonRoles(any())).thenReturn(roles);
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findPersonRoles(any())).thenReturn(List.class.cast(roles));
             personService = new PersonService(mockDao);
 
             assertEquals("Checking if set size is 1", 1, personService.findRoles(Long.valueOf(1)).size());
@@ -268,8 +282,8 @@ public class PersonServiceTest
             contact.setPerson(p);
             contacts.add(contact);
 
-            mockDao = mock(PersonDao.class);
-            when(mockDao.findPersonContacts(any())).thenReturn(contacts);
+            mockDao = mock(DaoParent.class);
+            when(mockDao.findPersonContacts(any())).thenReturn(List.class.cast(contacts));
             personService = new PersonService(mockDao);
 
 
@@ -328,7 +342,9 @@ public class PersonServiceTest
             Set<Role> roles = new HashSet<Role>();
             Role role1 = new Role();
             role1.setRole("Developer");
+            role1.setRoleId(Long.valueOf(1));
             roles.add(role1);
+            personService = new PersonService();
             assertTrue("Checking if set contains Developer", personService.containsRole(roles, "Developer"));
         }
 
@@ -337,8 +353,10 @@ public class PersonServiceTest
             Set<Role> roles = new HashSet<Role>();
             Role role1 = new Role();
             role1.setRole("Developer");
-            roles.add(role1);
+            role1.setRoleId(Long.valueOf(1));
+            personService = new PersonService();
             assertFalse("Checking if set contains Developer", personService.containsRole(roles, "Programmer"));
         }
+
 
     }
