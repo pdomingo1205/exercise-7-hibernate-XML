@@ -45,7 +45,6 @@ public class PersonService {
 		String updateStatus;
 		try{
 			dao.openCurrentSessionwithTransaction();
-			//System.out.println(entity.getRoles());
 			dao.update(entity);
 			dao.closeCurrentSessionwithTransaction();
 			updateStatus = "\n\t !!! Update Successful !!!";
@@ -79,8 +78,7 @@ public class PersonService {
 	}
 
 	public Boolean containsRole(Set<Role> listRole, String name){
-		//System.out.println("AAAAAAAAAAAAA"+listRole.stream().filter(role -> role.getRole().equals(name)).findFirst().isPresent());
-    	return listRole.stream().filter(role -> role.getRole().equals(name)).findFirst().isPresent();
+		return listRole.stream().filter(role -> role.getRole().equals(name)).findFirst().isPresent();
 	}
 
 	public Person findById(Long id) {
