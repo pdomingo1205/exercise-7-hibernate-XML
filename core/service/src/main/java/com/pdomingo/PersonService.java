@@ -5,19 +5,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 import com.pdomingo.model.person.*;
 import com.pdomingo.model.role.Role;
-import com.pdomingo.dao.PersonDao;
+import com.pdomingo.dao.*;
 import org.hibernate.NonUniqueObjectException;
 
 public class PersonService {
 
-	private static PersonDao personDao;
+	DaoParent<Person,Long> dao;
 
 	public PersonService() {
-		personDao = new PersonDao();
+		dao = new DaoParent();
 	}
 
-	public PersonService(PersonDao newDao) {
-		personDao = newDao;
+	public PersonService(DaoParent newDao) {
+		dao = newDao;
+	}
+
+	public void setDao(DaoParent newDao){
+		dao = newDao;
 	}
 
 	public String persist(Person entity) {
@@ -25,9 +29,9 @@ public class PersonService {
 
 		try{
 			System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
-			personDao.openCurrentSessionwithTransaction();
-			personDao.persist(entity);
-			personDao.closeCurrentSessionwithTransaction();
+			dao.openCurrentSessionwithTransaction();
+			dao.persist(entity);
+			dao.closeCurrentSessionwithTransaction();
 			updateStatus = "\n\t !!! Insert Successful !!!";
 		}catch(Exception e){
 			updateStatus = "\n\t !-- Insert Failed --!";
@@ -40,10 +44,10 @@ public class PersonService {
 	public String update(Person entity) {
 		String updateStatus;
 		try{
-			personDao.openCurrentSessionwithTransaction();
+			dao.openCurrentSessionwithTransaction();
 			//System.out.println(entity.getRoles());
-			personDao.update(entity);
-			personDao.closeCurrentSessionwithTransaction();
+			dao.update(entity);
+			dao.closeCurrentSessionwithTransaction();
 			updateStatus = "\n\t !!! Update Successful !!!";
 		}
 		catch(Exception e){
@@ -74,25 +78,30 @@ public class PersonService {
 		return contacts;
 	}
 
-	public Boolean containsRole(Set<Role> list, String name){
-    	return list.stream().filter(o -> o.getRole().equals(name)).findFirst().isPresent();
+	public Boolean containsRole(Set<Role> listRole, String name){
+		//System.out.println("AAAAAAAAAAAAA"+listRole.stream().filter(role -> role.getRole().equals(name)).findFirst().isPresent());
+    	return listRole.stream().filter(role -> role.getRole().equals(name)).findFirst().isPresent();
 	}
 
 	public Person findById(Long id) {
-		personDao.openCurrentSession();
-		Person person = personDao.findById(id);
-		//System.out.println("pservice findbyid\n\n\n" + person.getName() + "\n\n\n");
-		//personDao.getCurrentSession().evict(person);
-		personDao.closeCurrentSession();
+		dao.openCurrentSession();
+		Person person =(Person) dao.findById(id, Person.class);
+		dao.closeCurrentSession();
 		return person;
 	}
 
 	public Boolean checkIfExists(Long Id){
 		Boolean exists = true;
+		Person person = null;
+		try{
+			dao.openCurrentSession();
+			 person = (Person) dao.findById(Id, Person.class);
+			dao.closeCurrentSession();
+		}
+		catch(NullPointerException ne){
+			exists = false;
+		}
 
-		personDao.openCurrentSession();
-		Person person = personDao.findById(Id);
-		personDao.closeCurrentSession();
 
 		if(person == null){
 			exists = false;
@@ -105,10 +114,10 @@ public class PersonService {
 
 		String textToReturn;
 		try{
-			personDao.openCurrentSessionwithTransaction();
-			Person person = personDao.findById(id);
-			personDao.delete(person);
-			personDao.closeCurrentSessionwithTransaction();
+			dao.openCurrentSessionwithTransaction();
+			Person person = (Person) dao.findById(id, Person.class);
+			dao.delete(person);
+			dao.closeCurrentSessionwithTransaction();
 			textToReturn = "\n\t!!! Deleted !!!\n";
 
 		}catch(Exception e){
@@ -119,17 +128,17 @@ public class PersonService {
 	}
 
 	public List<Person> findAll() {
-		personDao.openCurrentSession();
-		List<Person> persons = personDao.findAll();
-		personDao.closeCurrentSession();
+		dao.openCurrentSession();
+		List<Person> persons = dao.findAll(Person.class);
+		dao.closeCurrentSession();
 		return persons;
 	}
 
 	public List<Person> findOrderBy(String field, Integer order) {
 		String stringOrder = order.equals(1)? "ASC": "DESC";
-		personDao.openCurrentSession();
-		List<Person> persons = personDao.findAllOrderBy(field, stringOrder);
-		personDao.closeCurrentSession();
+		dao.openCurrentSession();
+		List<Person> persons = dao.findAllOrderBy(field, stringOrder);
+		dao.closeCurrentSession();
 		return persons;
 	}
 
@@ -137,9 +146,9 @@ public class PersonService {
 
 		String textToReturn;
 		try{
-			personDao.openCurrentSessionwithTransaction();
-			personDao.deleteAll();
-			personDao.closeCurrentSessionwithTransaction();
+			dao.openCurrentSessionwithTransaction();
+			dao.deleteAll(Person.class);
+			dao.closeCurrentSessionwithTransaction();
 			textToReturn = "\n\t!!! Deleted !!!\n";
 
 		}catch(Exception e){
@@ -150,27 +159,27 @@ public class PersonService {
 	}
 
 	public List<Role> findRoles(Long id){
-		personDao.openCurrentSessionwithTransaction();
-		List<Role> roles = personDao.findPersonRoles(id);
-		personDao.closeCurrentSessionwithTransaction();
+		dao.openCurrentSessionwithTransaction();
+		List<Role> roles = dao.findPersonRoles(id);
+		dao.closeCurrentSessionwithTransaction();
 		return roles;
 	}
 
 	public List<String> findContacts(Long id){
-		personDao.openCurrentSessionwithTransaction();
-		List<ContactInfo> contacts = personDao.findPersonContacts(id);
-		
+		dao.openCurrentSessionwithTransaction();
+		List<ContactInfo> contacts = dao.findPersonContacts(id);
+
 		List<String> contactString = new ArrayList<String>();
 
 		for (ContactInfo contact : contacts) {
 			contactString.add(contact.toString());
 		}
-		personDao.closeCurrentSessionwithTransaction();
+		dao.closeCurrentSessionwithTransaction();
 
 		return contactString;
 	}
 
-	public PersonDao personDao() {
-		return personDao;
+	public DaoParent dao() {
+		return dao;
 	}
 }

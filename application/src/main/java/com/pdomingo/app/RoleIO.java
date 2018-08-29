@@ -25,6 +25,7 @@ public class RoleIO {
 	    System.out.print("\033[H\033[2J");
 	    System.out.flush();
 	}
+
 	public Integer chooseOperation(){
 
 		System.out.println("\n\t--- Choose Operation --- \n");
@@ -58,7 +59,6 @@ public class RoleIO {
 
 	}
 
-
 	public Role addRole(){
 		Role role = new Role();
 		String roleName = askRole();
@@ -87,37 +87,23 @@ public class RoleIO {
 		return inputRole;
 	}
 
-	public void readRole(){
-
-		System.out.println("\n\t--- Input ID of role to read *Use List to find ID's --- \n");
-		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
-		Role role;
-
-		if(roleService.checkIfExists(inputId)){
-			role = roleService.findById(inputId);
-
-			System.out.println(role);
-		}
-		else{
-			System.out.println("\n\t!-- Role does not exist --!\n");
-		}
-
-	}
-
 	public void updateRole(){
 
 		System.out.println("\n\t--- Input ID of role to update *Use List to find ID's ---\n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		Role role;
+		Role newRole;
 
 		if(roleService.checkIfExists(inputId)){
 			role = roleService.findById(inputId);
 
 			System.out.println("\n\t--- Input new Role ---\n");
-			String newRole = InputValidation.Validate.getRequiredInput();
-			
-				role = roleService.checkIfUnique(newRole);
-			System.out.println(roleService.update(role));
+			String newRoleName = InputValidation.Validate.getRequiredInput();
+
+			newRole = roleService.checkIfUnique(newRoleName);
+			newRole.setRoleId(role.getRoleId());
+
+			System.out.println(roleService.update(newRole));
 
 		}
 		else{

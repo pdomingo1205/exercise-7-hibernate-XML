@@ -1,36 +1,39 @@
 package com.pdomingo.dao;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
+
+import com.pdomingo.model.person.*;
+import com.pdomingo.model.role.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.Transaction;
-
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.Criteria;
 import org.hibernate.MappingException;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 
+public class DaoParent<T, Id extends Serializable> {
 
-import com.pdomingo.model.person.*;
-import com.pdomingo.model.role.Role;
+	static private Session currentSession;
+	static private Transaction currentTransaction;
 
-public class PersonDao implements DaoInterface<Person, Long> {
+	public DaoParent(){
 
-	private Session currentSession;
-
-	private Transaction currentTransaction;
-
-	public PersonDao(){
 	}
 
 	public Session openCurrentSession() {
-		currentSession = sessionFactory.openSession();
+		currentSession = DaoConfig.getSessionFactory().openSession();
 		return currentSession;
 	}
 
 	public Session openCurrentSessionwithTransaction() {
-		currentSession = sessionFactory.openSession();
+		currentSession = DaoConfig.getSessionFactory().openSession();
 		currentTransaction = currentSession.beginTransaction();
 		return currentSession;
 	}
@@ -42,13 +45,6 @@ public class PersonDao implements DaoInterface<Person, Long> {
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
-	}
-
-	private static SessionFactory getSessionFactory() {
-
-		//Configuration configuration = new Configuration().configure();
-        //SessionFactory sessionFactory = configuration.buildSessionFactory();
-		return sessionFactory;
 	}
 
 	public Session getCurrentSession() {
@@ -67,38 +63,46 @@ public class PersonDao implements DaoInterface<Person, Long> {
 		this.currentTransaction = currentTransaction;
 	}
 
-	public void persist(Person entity) {
-		//System.out.println("\n\n\n" + entity.getName() + "\n\n\n");
+	public void persist(T entity){
 		getCurrentSession().saveOrUpdate(entity);
 		getCurrentSession().flush();
 	}
 
-	public void update(Person entity) {
+	public void update(T entity) {
 		getCurrentSession().update(entity);
 		getCurrentSession().flush();
 	}
 
+
+	public void delete(T entity) {
+		getCurrentSession().delete(entity);
+	}
+
+	public List<T> findAll (Class<T> type) {
+		List<T> list = getCurrentSession().createCriteria(type).list();
+		//Collections.sort(list);
+		return list;
+	}
+
+	public <T>T findById (Long id, Class<?> type) {
+		T t = (T) getCurrentSession().get(type, id);
+		return t;
+	}
+
+
+	public void deleteAll(Class<T> type) {
+		List<T> entityList = findAll(type);
+		for (T entity : entityList) {
+			delete(entity);
+		}
+	}
+
 	public void updateRole(Person entity) {
-		Person person = findById(entity.getPersonId());
+		Person person = findById(entity.getPersonId(), Person.class);
 		getCurrentSession().evict(person);
 		person = entity;
 		getCurrentSession().merge(person);
 		getCurrentSession().flush();
-	}
-
-	public Person findById(Long id) {
-		Person person = (Person) getCurrentSession().get(Person.class, id);
-		return person;
-	}
-
-	public void delete(Person entity) {
-		getCurrentSession().delete(entity);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Person> findAll() {
-		List<Person> persons = (List<Person>) getCurrentSession().createQuery("from Person").list();
-		return persons;
 	}
 
 	public List<Person> findAllOrderBy(String field, String order) {
@@ -121,12 +125,16 @@ public class PersonDao implements DaoInterface<Person, Long> {
 		return roles;
 	}
 
+	public Role findByRoleName(String roleName){
+		Role role = new Role();
+		try{
+			Query query= getCurrentSession().createQuery("from Role where role=:name");
+			query.setParameter("name", roleName);
+			role = (Role) query.uniqueResult();
+		}catch(Exception e){
 
-	public void deleteAll() {
-		List<Person> entityList = findAll();
-		for (Person entity : entityList) {
-			delete(entity);
 		}
+		return role;
 	}
 
 }

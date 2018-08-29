@@ -101,57 +101,32 @@ public class ContactIO {
 	public ContactInfo addContact(){
 		ContactInfo contact = new ContactInfo();
         Integer intContactType = askContactType();
-
         contact.setContactType(contactTypeToString(intContactType));
         contact.setContactInfo(askContactInfo(intContactType));
+
         return contact;
 	}
-
 
 	public ContactInfo editContact(ContactInfo contact){
         Integer intContactType = askContactType();
-
         contact.setContactType(contactTypeToString(intContactType));
         contact.setContactInfo(askContactInfo(intContactType));
+
         return contact;
 	}
 
-	public void createContact(){
-		ContactInfo contact = new ContactInfo();
-		Integer intContactType = askContactType();
-
-		contact.setContactType(contactTypeToString(intContactType));
-        contact.setContactInfo(askContactInfo(intContactType));
-
-		System.out.println(contactInfoService.persist(contact));
-	}
-
-	public void readContact(){
-		System.out.println("\n\t Input ID of contact to read *Use List to find ID's \n");
-		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
-		ContactInfo contact;
-
-		if(contactInfoService.checkIfExists(inputId)){
-			contact = contactInfoService.findById(inputId);
-
-			System.out.println(contact.getContactType());
-		}
-		else{
-			System.out.println("\n\t Contact does not exist \n");
-		}
-	}
-
 	public void updateContact(){
-
 		System.out.println("\n\t Input ID of Contact Info to update *Use List to find ID's \n");
 		Long inputId = Long.valueOf(InputValidation.Validate.getInteger());
 		ContactInfo contactInfo;
 
 		if(contactInfoService.checkIfExists(inputId)){
+
 			contactInfo = contactInfoService.findById(inputId);
 			System.out.println("\n\n\n"+contactInfo.getContactInfoId());
 			ContactInfo contact = editContact(contactInfo);
 			contact.setContactInfoId(inputId);
+
 			try{
 				System.out.println(contact);
 

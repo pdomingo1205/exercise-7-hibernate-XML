@@ -3,43 +3,30 @@ package com.pdomingo.service;
 import java.util.List;
 
 import com.pdomingo.model.person.ContactInfo;
-import com.pdomingo.dao.ContactInfoDao;
+import com.pdomingo.dao.DaoParent;
 
 public class ContactInfoService {
 
-	private static ContactInfoDao contactInfoDao;
+	private DaoParent<ContactInfo,Long>dao;
 
 	public ContactInfoService() {
-		contactInfoDao = new ContactInfoDao();
+		dao = new DaoParent();
 	}
 
-	public ContactInfoService(ContactInfoDao newDao) {
-		contactInfoDao = newDao;
+	public ContactInfoService(DaoParent newDao) {
+		dao = newDao;
 	}
 
-	public String persist(ContactInfo entity) {
-
-		String textToReturn;
-		try{
-			contactInfoDao.openCurrentSessionwithTransaction();
-			contactInfoDao.persist(entity);
-			contactInfoDao.closeCurrentSessionwithTransaction();
-				textToReturn = "\n\t!!! Insert Sucessful !!!\n";
-		}catch(Exception e){
-			textToReturn = "\n\t!-- Insert Failed --!\n";
-		}
-		return textToReturn;
-	}
 
 	public String update(ContactInfo entity) {
 		String textToReturn;
 		try{
-				contactInfoDao.openCurrentSessionwithTransaction();
-				ContactInfo persistentInfo = contactInfoDao.findById(entity.getContactInfoId());
+				dao.openCurrentSessionwithTransaction();
+				ContactInfo persistentInfo = (ContactInfo) dao.findById(entity.getContactInfoId(), ContactInfo.class);
 				persistentInfo.setContactInfo(entity.getContactInfo());
 				persistentInfo.setContactType(entity.getContactType());
-				contactInfoDao.update(persistentInfo);
-				contactInfoDao.closeCurrentSessionwithTransaction();
+				dao.update(persistentInfo);
+				dao.closeCurrentSessionwithTransaction();
 				textToReturn = "\n\t!!! Update Sucessful !!!\n";
 		}catch(Exception e){
 			textToReturn = "\n\t!-- Update Failed --!\n";
@@ -50,9 +37,9 @@ public class ContactInfoService {
 	public Boolean checkIfExists(Long Id){
 		Boolean exists = true;
 
-		contactInfoDao.openCurrentSession();
-		ContactInfo contact = contactInfoDao.findById(Id);
-		contactInfoDao.closeCurrentSession();
+		dao.openCurrentSession();
+		ContactInfo contact = (ContactInfo) dao.findById(Id, ContactInfo.class);
+		dao.closeCurrentSession();
 
 		if(contact == null){
 			exists = false;
@@ -63,9 +50,9 @@ public class ContactInfoService {
 
 	public ContactInfo findById(Long id) {
 
-		contactInfoDao.openCurrentSession();
-		ContactInfo contactInfo = contactInfoDao.findById(id);
-		contactInfoDao.closeCurrentSession();
+		dao.openCurrentSession();
+		ContactInfo contactInfo = (ContactInfo) dao.findById(id, ContactInfo.class);
+		dao.closeCurrentSession();
 		return contactInfo;
 	}
 
@@ -73,9 +60,9 @@ public class ContactInfoService {
 
 		String textToReturn;
 		try{
-				contactInfoDao.openCurrentSessionwithTransaction();
-				contactInfoDao.deleteAll();
-				contactInfoDao.closeCurrentSessionwithTransaction();
+				dao.openCurrentSessionwithTransaction();
+				dao.delete(findById(id));
+				dao.closeCurrentSessionwithTransaction();
 				textToReturn = "\n\t!!! Delete Sucessful !!!\n";
 		}catch(Exception e){
 			textToReturn = "\n\t!-- Delete Failed --!\n";
@@ -84,26 +71,14 @@ public class ContactInfoService {
 	}
 
 	public List<ContactInfo> findAll() {
-		contactInfoDao.openCurrentSession();
-		List<ContactInfo> contactInfos = contactInfoDao.findAll();
-		contactInfoDao.closeCurrentSession();
+		dao.openCurrentSession();
+		List<ContactInfo> contactInfos = dao.findAll(ContactInfo.class);
+		dao.closeCurrentSession();
 		return contactInfos;
 	}
 
-	public String deleteAll() {
-		String textToReturn;
-		try{
-				contactInfoDao.openCurrentSessionwithTransaction();
-				contactInfoDao.deleteAll();
-				contactInfoDao.closeCurrentSessionwithTransaction();
-				textToReturn = "\n\t!!! Delete Sucessful !!!\n";
-		}catch(Exception e){
-			textToReturn = "\n\t!-- Delete Failed --!\n";
-		}
-		return textToReturn;
-	}
 
-	public ContactInfoDao contactInfoDao() {
-		return contactInfoDao;
+	public DaoParent dao() {
+		return dao;
 	}
 }
